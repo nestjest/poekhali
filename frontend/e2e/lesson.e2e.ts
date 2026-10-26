@@ -12,9 +12,10 @@ test('пульт открывает этап → ученик продолжае
   await form.getByRole('textbox').nth(1).fill('Лис');
   await form.getByRole('button', { name: 'Войти в урок' }).click();
 
-  await expect(page.getByText('ЖДЁМ КОМАНДУ ЦУП')).toBeVisible();
+  const waiting = page.getByText('ЖДЁМ КОМАНДУ ЦУП', { exact: true });
+  await expect(waiting).toBeVisible();
   await t.act('stage', { stage: 'intro', open: true });
-  await expect(page.getByText('ЖДЁМ КОМАНДУ ЦУП')).toBeHidden({ timeout: 25_000 });
+  await expect(waiting).toBeHidden({ timeout: 25_000 });
   await expect(page.locator('.dlg-wrap')).toBeVisible();
 
   await t.act('attention', { on: true, text: 'Смотрим на доску' });
@@ -113,9 +114,9 @@ test('без WebSocket (как на Vercel): этап и «Внимание!» �
   const waiting = page.getByText('ЖДЁМ КОМАНДУ ЦУП', { exact: true });
   await expect(waiting).toBeVisible();
   await t.act('stage', { stage: 'intro', open: true });
-  await expect(waiting).toBeHidden({ timeout: 8_000 });   // polling every 3 s
+  await expect(waiting).toBeHidden({ timeout: 12_000 });   // polling every 3 s (+ a cold start on Vercel)
   await expect(page.locator('.dlg-wrap')).toBeVisible();
   await t.act('attention', { on: true, text: 'Смотрим на доску' });
-  await expect(page.getByRole('alertdialog', { name: 'Внимание!' })).toBeVisible({ timeout: 8_000 });
+  await expect(page.getByRole('alertdialog', { name: 'Внимание!' })).toBeVisible({ timeout: 12_000 });
   await t.act('end');
 });

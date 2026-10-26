@@ -1,7 +1,7 @@
 // Shared e2e helpers: the teacher API and the layout check (no tests here).
 import { expect, type APIRequestContext, type Page } from '@playwright/test';
 
-const PASSWORD = 'e2e-pass-42';
+const PASSWORD = process.env.E2E_PASSWORD ?? 'e2e-pass-42';
 
 export async function teacher(request: APIRequestContext) {
   const token = (await (await request.post('/api/teacher/login', { data: { password: PASSWORD } })).json()).token as string;

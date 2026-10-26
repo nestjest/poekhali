@@ -9,14 +9,17 @@ const PORT = 8010;
 // E2E_DATABASE_URL=postgresql://… runs the same tests on PostgreSQL (the Vercel setup).
 const db = process.env.E2E_DATABASE_URL ?? join(tmpdir(), `bureau-e2e-${Date.now()}.db`);
 
+// E2E_BASE_URL=https://… E2E_PASSWORD=… runs the tests against a deployed server (Vercel) instead of a local one.
+const remote = process.env.E2E_BASE_URL;
+
 export default defineConfig({
   testDir: 'e2e',
   testMatch: '*.e2e.ts',      // not *.spec.ts / *.test.ts: those belong to Vitest
   timeout: 60_000,
   workers: 1,
   reporter: [['list']],
-  use: { baseURL: `http://localhost:${PORT}`, channel: 'chrome', headless: true, locale: 'ru-RU' },
-  webServer: {
+  use: { baseURL: remote ?? `http://localhost:${PORT}`, channel: 'chrome', headless: true, locale: 'ru-RU' },
+  webServer: remote ? undefined : {
     command: `python -m bureau_server --host 127.0.0.1 --port ${PORT} --db "${db}"`,
     cwd: '../server',
     url: `http://localhost:${PORT}/api/health`,

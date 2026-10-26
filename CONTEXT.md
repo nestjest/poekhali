@@ -133,3 +133,4 @@
 - `api/index.py` + `vercel.json` + `requirements.txt` (корень) + `.vercelignore`: статика игры и FastAPI-функция `/api/*`.
 - Клиент и пульт: без WebSocket — опрос каждые 3 с (`POLL_FAST_MS`, `WS_GIVE_UP`), `no-store` на API.
 - Проверено: pytest сервера 46 — на SQLite и на PostgreSQL 16 (Docker); e2e 9 на PostgreSQL, в т. ч. новый «без WebSocket»; точка входа Vercel — холодный старт, вход преподавателя, повторный старт без выхода.
+- Развёрнуто: https://poekhali.vercel.app (проект Vercel `poekhali`, база Neon `poekhali-db`, пароль преподавателя — переменная `BUREAU_TEACHER_PASSWORD`, Git подключён: push в `main` → деплой). e2e 9/9 на живом адресе (`E2E_BASE_URL`, `E2E_PASSWORD`).

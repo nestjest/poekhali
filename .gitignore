@@ -18,3 +18,10 @@ server/data/
 .env.*
 .codegraph/
 ui-audit/
+
+.vercel
+.env*
+# agent skills installed by the Vercel Neon integration (not part of the course)
+.agents/
+.claude/skills/neon*
+skills-lock.json
