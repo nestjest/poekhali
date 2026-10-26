@@ -1,0 +1,291 @@
+{
+  "id": "d1-closing",
+  "lesson": 1,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "studio",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [
+        {
+          "who": "olga",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "vika",
+          "pos": "right",
+          "mood": "joy"
+        }
+      ],
+      "title": "Вторник, 18:00",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "joy",
+      "text": "Смена закрыта! Утром «//» были просто двумя чёрточками, а к вечеру ты считаешь минуты и секунды.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Плюс f-строки и методы. Они пригодятся в каждой программе.",
+      "id": "n3"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Перед стартом последний шаг: сводку сеанса собирает экипаж. У каждого своя часть программы.",
+      "id": "crew_intro"
+    },
+    {
+      "type": "crew",
+      "mission": "crew1",
+      "id": "crew_task"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Сводка на борту. Вот это слаженная работа!",
+      "id": "crew_done"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "neutral",
+      "text": "«Облачко» собрано из ваших программ. Андрей Ильич и Тамара Ильинична уже ждут на старте.",
+      "id": "n4"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Идём!",
+          "next": "n6"
+        },
+        {
+          "text": "Только телефон захвачу",
+          "next": "n6"
+        }
+      ],
+      "id": "n5"
+    },
+    {
+      "type": "scene",
+      "location": "launch",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [
+        {
+          "who": "olga",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "gromov",
+          "pos": "center",
+          "mood": "neutral"
+        },
+        {
+          "who": "tamara",
+          "pos": "right",
+          "mood": "joy"
+        }
+      ],
+      "id": "n6"
+    },
+    {
+      "type": "narrate",
+      "text": "Над стартовым столом догорает закат. Ракета уже подсвечена, на фермах тихо.",
+      "id": "n7"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "neutral",
+      "text": "«Облачко» принято. Стартуем с Плесецка — самого северного космодрома России.",
+      "id": "n8"
+    },
+    {
+      "type": "say",
+      "who": "tamara",
+      "mood": "joy",
+      "text": "Голубчик, я ждала этого с самого утра. Теперь облака будут у меня как на ладони.",
+      "id": "n9"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Поехали, Тамара Ильинична!",
+          "next": "n11"
+        },
+        {
+          "text": "Сейчас всё получится",
+          "next": "n12"
+        }
+      ],
+      "id": "n10"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "joy",
+      "text": "Поехали!",
+      "next": "n13",
+      "id": "n11"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "neutral",
+      "text": "Семь раз проверено. Один раз запускаем.",
+      "id": "n12"
+    },
+    {
+      "type": "launch",
+      "craft": "Облачко",
+      "text": "«Облачко» выходит на орбиту",
+      "id": "n13"
+    },
+    {
+      "type": "say",
+      "who": "tamara",
+      "mood": "joy",
+      "text": "Есть телеметрия! Всё, что вы сегодня писали, сейчас летит над нами.",
+      "id": "n14"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "joy",
+      "text": "Хорошая работа, коллеги.",
+      "id": "n15"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "`//` и `%`: минуты и секунды",
+          "next": "n17"
+        },
+        {
+          "text": "f-строки",
+          "next": "n18"
+        },
+        {
+          "text": "Методы строк",
+          "next": "n19"
+        },
+        {
+          "text": "Всё было понятно",
+          "next": "n20"
+        }
+      ],
+      "prompt": "Что сегодня оказалось самым полезным?",
+      "id": "n16"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "joy",
+      "text": "Пара `//` и `%` ещё не раз выручит. Всё, что делится на части, считается ими.",
+      "next": "n21",
+      "id": "n17"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "С f-строками ответ выглядит как письмо, а не как набор чисел.",
+      "next": "n21",
+      "id": "n18"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "joy",
+      "text": "Методы — это маленькие инструменты. Их у строки ещё много.",
+      "next": "n21",
+      "id": "n19"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Отлично! Значит, завтра можно браться за задачи посложнее.",
+      "id": "n20"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "До завтра!",
+          "next": "n22"
+        },
+        {
+          "text": "Спасибо вам всем",
+          "next": "n23"
+        }
+      ],
+      "prompt": "Пора прощаться",
+      "id": "n21"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "До завтра! Приходи с хорошим настроением.",
+      "next": "n24",
+      "id": "n22"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "joy",
+      "text": "Тебе спасибо. Хороший вторник.",
+      "id": "n23"
+    },
+    {
+      "type": "scene",
+      "location": "street",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [],
+      "title": "Вторник, 18:50",
+      "id": "n24"
+    },
+    {
+      "type": "narrate",
+      "text": "Иду к проходной. Над корпусами зажглись окна, и где-то там «Облачко» уже шлёт первые числа.",
+      "id": "n25"
+    },
+    {
+      "type": "narrate",
+      "text": "В голове крутится: strip, title, upper. Странно, но это звучит как позывные.",
+      "id": "n26"
+    },
+    {
+      "id": "quote_of_day",
+      "type": "quote",
+      "quote": "tsiolkovsky_cradle"
+    },
+    {
+      "type": "flag",
+      "set": "day2_closing_done",
+      "id": "n27"
+    },
+    {
+      "type": "end",
+      "id": "n28"
+    }
+  ]
+}

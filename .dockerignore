@@ -1,0 +1,8 @@
+**/node_modules
+frontend/dist
+frontend/public/pyodide
+frontend/tsconfig.tsbuildinfo
+**/__pycache__
+**/.pytest_cache
+server/data
+*.db

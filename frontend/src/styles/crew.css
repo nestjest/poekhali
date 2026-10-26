@@ -1,0 +1,96 @@
+/* Team «Конец смены»: crew program (game/CrewMission.tsx) and the «Гонка экипажей» board. Values come from tokens.css. */
+.crew-room { position: absolute; inset: 76px 12px 16px; z-index: 12; display: flex; flex-direction: column; gap: var(--s2);
+  background: var(--surface); color: var(--text); border: var(--outline-w) solid var(--line); border-radius: var(--r3);
+  box-shadow: 0 6px 0 var(--line), 0 20px 50px rgba(0, 0, 0, .35); padding: var(--s3); overflow: hidden; }
+.crew-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); }
+.crew-title { display: grid; gap: 2px; flex: 1 1 260px; min-width: 0; }
+.crew-kicker { font-size: var(--fs-small); font-weight: 700; color: var(--primary); }
+.crew-title h2 { font-size: var(--fs-h3); overflow-wrap: anywhere; }
+.crew-members { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+.crew-member { display: flex; align-items: center; gap: var(--s2); min-height: var(--tap); padding: var(--s1) var(--s2); border-radius: var(--r2);
+  border: 2px solid color-mix(in srgb, var(--line) 45%, transparent); background: var(--surface-2); min-width: 0; }
+.crew-member.me { border-color: var(--primary); }
+.crew-member-text { display: grid; line-height: 1.25; min-width: 0; overflow-wrap: anywhere; }
+.crew-mark { flex: none; width: 26px; height: 26px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center;
+  border: 2px solid var(--line); background: var(--surface); font-weight: 800; font-size: 14px; line-height: 1; }
+.crew-mark.ok { background: var(--ok-bg); color: var(--ok); }
+.crew-rank { flex: none; }
+.crew-brief { font-size: var(--fs-small); }
+.crew-tabs { display: none; }
+.crew-grid { flex: 1; min-height: 0; display: grid; gap: var(--s3);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(260px, .8fr); grid-template-areas: "mine all side"; }
+.crew-grid.solo { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-areas: "mine all"; }
+.crew-mine { grid-area: mine; } .crew-all { grid-area: all; } .crew-side { grid-area: side; }
+.crew-pane { min-height: 0; overflow: auto; display: grid; gap: var(--s2); align-content: start; padding: 4px; } /* room for focus outlines */
+.crew-role { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; }
+.crew-task { display: grid; gap: var(--s1); }
+.crew-io { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s1) var(--s2); font-size: var(--fs-small); }
+.crew-io dt { font-weight: 700; } .crew-io dd { margin: 0; overflow-wrap: anywhere; }
+.crew-parts-tabs { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.crew-program { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.crew-block { border: 2px solid color-mix(in srgb, var(--line) 45%, transparent); border-radius: var(--r2); overflow: hidden; background: var(--code-bg); }
+.crew-block.bad { border-color: var(--bad); }
+.crew-block-head { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; min-height: var(--tap); padding: var(--s1) var(--s2);
+  background: var(--surface-2); }
+.crew-flag { margin-left: auto; font-size: var(--fs-small); font-weight: 700; color: var(--bad); }
+.crew-code { margin: 0; padding: var(--s2); font-size: var(--fs-code); line-height: 1.6; white-space: pre; overflow-x: auto; }
+.crew-line { display: block; }
+.crew-ln { display: inline-block; width: 3ch; margin-right: var(--s2); text-align: right; color: var(--muted); user-select: none; }
+.crew-results { gap: var(--s2); }
+.crew-cases { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s1); }
+.crew-side { align-content: start; }
+.crew-chat, .crew-race-box { display: grid; gap: var(--s2); align-content: start; min-width: 0; }
+.crew-chat h3, .crew-race-box h3 { font-size: var(--fs-body); }
+.crew-msgs { list-style: none; margin: 0; padding: var(--s2); display: grid; gap: var(--s2); max-height: 240px; overflow: auto;
+  border: 2px solid color-mix(in srgb, var(--line) 35%, transparent); border-radius: var(--r2); background: var(--surface-2); }
+.crew-msg { justify-self: start; max-width: 92%; padding: var(--s1) var(--s2); border-radius: 14px 14px 14px 4px; font-size: var(--fs-small);
+  background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--line) 50%, transparent); overflow-wrap: anywhere; }
+.crew-msg.me { justify-self: end; border-radius: 14px 14px 4px 14px; background: var(--accent-soft); }
+.crew-quick { display: flex; flex-wrap: wrap; gap: var(--s1); }
+.crew-send { display: flex; gap: var(--s2); }
+.crew-send .pass-input { flex: 1; min-width: 0; min-height: var(--tap); font-size: var(--fs-body); }
+.crew-vika { display: flex; align-items: center; gap: var(--s2); flex-wrap: wrap; padding: var(--s2) var(--s3); border-radius: var(--r2);
+  background: var(--warn-bg); color: var(--text); border: 2px solid var(--line); }
+.crew-vika-text { flex: 1 1 240px; min-width: 0; }
+.crew-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); padding-top: var(--s2);
+  border-top: 2px dashed color-mix(in srgb, var(--line) 40%, transparent); }
+@media (max-width: 1279px) {
+  .crew-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-template-areas: "mine all" "mine side"; }
+  .crew-grid.solo { grid-template-rows: minmax(0, 1fr); grid-template-areas: "mine all"; }
+}
+@media (max-width: 899px) {
+  .crew-room { inset: 76px 4px 8px; padding: var(--s2); }
+  .crew-tabs { display: flex; flex-wrap: wrap; gap: var(--s1); }
+  .crew-tab { min-height: var(--tap); padding: 0 var(--s3); border-radius: var(--r-pill); border: 2px solid var(--line); background: var(--surface-2);
+    color: var(--text); font: inherit; font-size: var(--fs-small); font-weight: 700; cursor: pointer; }
+  .crew-tab[aria-selected="true"] { background: var(--primary); color: var(--on-primary); }
+  .crew-grid, .crew-grid.solo { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "pane"; }
+  .crew-pane { grid-area: pane; }
+  .crew-pane[data-active="false"] { display: none; }
+  .crew-side[data-pane="race"] .crew-chat, .crew-side[data-pane="chat"] .crew-race-box { display: none; }
+  .crew-member-text .small { display: none; }
+  .crew-msgs { max-height: none; }
+}
+
+/* ---------- «Гонка экипажей» ---------- */
+.race { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.race-row { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; grid-template-areas: "place name points" "place track track";
+  align-items: center; gap: var(--s1) var(--s2); padding: var(--s2); border-radius: var(--r2); background: var(--surface); color: var(--text);
+  border: 2px solid color-mix(in srgb, var(--line) 35%, transparent); }
+.race-row.mine { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--surface)); }
+.race-place { grid-area: place; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; border: 2px solid var(--line); background: var(--surface-2); line-height: 1; }
+.race-row.first .race-place { background: var(--star); color: var(--on-accent); }
+.race-name { grid-area: name; display: grid; min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
+.race-parts { color: var(--muted); }
+.race-track { grid-area: track; display: block; height: 10px; border-radius: var(--r-pill); overflow: hidden; background: var(--surface-2);
+  border: 1.5px solid color-mix(in srgb, var(--line) 50%, transparent); }
+.race-fill { display: block; height: 100%; width: 100%; background: var(--primary); transform-origin: left center; transition: transform .4s ease; }
+.race-points { grid-area: points; font-weight: 800; font-size: var(--fs-h3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .race-fill { transition: none; } }
+
+/* hall: crew standing chip (opens the «Экипаж» app) */
+.race-chip { position: absolute; left: 16px; bottom: 16px; z-index: 9; display: inline-flex; align-items: center; gap: var(--s2);
+  max-width: calc(100% - 32px); }
+@media (max-width: 720px) { .race-chip { position: static; margin: 0 var(--s3) var(--s3); } }

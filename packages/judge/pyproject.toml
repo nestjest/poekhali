@@ -1,0 +1,10 @@
+[project]
+name = "judge"
+version = "0.1.0"
+description = "Mission judge for the educational course «Поехали!»"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+pythonpath = [".", "../../tools"]
+testpaths = ["tests", "../../tools/tests"]

@@ -1,0 +1,236 @@
+{
+  "id": "l2-review",
+  "lesson": 2,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "desk",
+      "time": "evening",
+      "transition": "slide",
+      "cast": [
+        {
+          "who": "vika",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "max",
+          "pos": "right",
+          "mood": "neutral"
+        }
+      ],
+      "title": "Разбор полётов",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Разбор полётов. Макс написал код окна связи, а мы его проверим.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Работает! Я проверил на среде, на десять утра.",
+      "id": "n3"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Это один случай из многих.",
+          "next": "n5"
+        },
+        {
+          "text": "Давай проверим пятницу.",
+          "next": "n6"
+        },
+        {
+          "text": "Покажи код.",
+          "next": "n7"
+        }
+      ],
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Именно. Хороший тест проверяет границы.",
+      "id": "n5",
+      "next": "n8"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "Пятницу? Ну давай.",
+      "id": "n6",
+      "next": "n8"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "neutral",
+      "text": "Сейчас открою.",
+      "id": "n7",
+      "next": "n8"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "predict",
+        "prompt": "Пятница, десять утра. Что напечатает программа Макса?",
+        "requires": [
+          "logic",
+          "input_check"
+        ],
+        "introduces": [],
+        "hint": "Пятница — это день 5. Подходит ли он под `day < 5`?",
+        "explain": "5 не меньше 5, первое сравнение ложно. Значит, сработает `else`, хотя в пятницу окно должно быть открыто.",
+        "feedback_correct": "Верно: в пятницу окно закрыто. Баг найден.",
+        "feedback_wrong": "Ловушка! Строгое «меньше» не пускает число 5.",
+        "code": [
+          "day = 5",
+          "hour = 10",
+          "if day < 5 and hour >= 8 and hour < 18:",
+          "    print(\"Окно открыто\")",
+          "else:",
+          "    print(\"Окно закрыто\")"
+        ]
+      },
+      "id": "n8"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "Ой. Пятница-то рабочая…",
+      "id": "n9"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "find_bug",
+        "prompt": "В какой строке спрятан баг?",
+        "requires": [
+          "logic",
+          "compare"
+        ],
+        "introduces": [],
+        "hint": "Будни — это дни с 1 по 5, включая пятницу.",
+        "explain": "В строке 3 стоит `day < 5`, а нужно `day <= 5`: пятница, день 5, тоже будний день.",
+        "feedback_correct": "Да, строка 3.",
+        "feedback_wrong": "Не та строка. Ищи сравнение с днём недели.",
+        "code": [
+          "hour = int(input(\"Час? \"))",
+          "day = int(input(\"День недели? \"))",
+          "if day < 5 and hour >= 8 and hour < 18:",
+          "    print(\"Окно открыто\")",
+          "else:",
+          "    print(\"Окно закрыто\")"
+        ],
+        "answer": 3
+      },
+      "id": "n10"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Границы — самое частое место для багов: 0, 5, 8, 18. Проверяй числа на самой границе и по обе стороны.",
+      "id": "n11"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Проверю границы.",
+          "next": "n13"
+        },
+        {
+          "text": "А если границ много?",
+          "next": "n14"
+        }
+      ],
+      "id": "n12"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Вот и правило: границу — на стенд.",
+      "id": "n13",
+      "next": "n15"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Тогда записывай их списком и прогоняй по очереди.",
+      "id": "n14",
+      "next": "n15"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "tiny_code",
+        "prompt": "Допиши программу: в 8 утра окно открыто, в 18 уже закрыто.",
+        "requires": [
+          "logic",
+          "if_else"
+        ],
+        "introduces": [],
+        "hint": "Нужны два сравнения с `and`. Восемь входит, восемнадцать нет.",
+        "explain": "Условие `hour >= 8 and hour < 18` пускает 8 и не пускает 18.",
+        "feedback_correct": "Всё сошлось на границе.",
+        "feedback_wrong": "Не сошлось. Проверь, входит ли 8 и не входит ли 18.",
+        "starter": [
+          "hour = int(input())",
+          "# Выведи Открыто, если час с 8 до 17, иначе Закрыто"
+        ],
+        "reference": [
+          "hour = int(input())",
+          "if hour >= 8 and hour < 18:",
+          "    print(\"Открыто\")",
+          "else:",
+          "    print(\"Закрыто\")"
+        ],
+        "expected_stdout": [
+          "Закрыто"
+        ],
+        "stdin": [
+          "18"
+        ]
+      },
+      "id": "n15"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Теперь понял: сначала границы, потом всё остальное. Спасибо!",
+      "id": "n16"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Хорошая смена. Идём на старт: «Северок» ждёт.",
+      "id": "n17"
+    },
+    {
+      "type": "flag",
+      "set": "review_done",
+      "id": "n18"
+    },
+    {
+      "type": "end",
+      "id": "n19"
+    }
+  ]
+}

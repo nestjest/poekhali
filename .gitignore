@@ -1,0 +1,20 @@
+# dependencies and builds
+node_modules/
+frontend/dist/
+frontend/public/pyodide/
+frontend/test-results/
+frontend/playwright-report/
+*.tsbuildinfo
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# lesson server data (database with the teacher password hash and students' pseudonyms)
+server/data/
+*.db
+# local
+.env
+.env.*
+.codegraph/
+ui-audit/

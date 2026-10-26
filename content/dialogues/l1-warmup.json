@@ -1,0 +1,205 @@
+{
+  "id": "l1-warmup",
+  "lesson": 1,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "desk",
+      "time": "morning",
+      "transition": "slide",
+      "cast": [
+        {
+          "who": "vika",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "max",
+          "pos": "right",
+          "mood": "neutral"
+        }
+      ],
+      "title": "Разминка",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Вчера ты освоил print и input. Давай вспомним, что ещё лежит в Тетради инженера.",
+      "id": "n2"
+    },
+    {
+      "type": "board",
+      "title": "Вчера на доске",
+      "lines": [
+        "`print(\"Кедр\")` — вывести текст",
+        "`name = input()` — ответ всегда строка",
+        "`int(\"7\")` — из текста число 7",
+        "`len(\"Кедр\")` — символов в строке: 4"
+      ],
+      "id": "recap"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Сначала глянь на доску: тут главное со вчера. Вопросы — сразу после.",
+      "id": "recap_say"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "predict",
+        "prompt": "Оператор ввёл Кедр. Что появится на экране?",
+        "requires": [
+          "input",
+          "len"
+        ],
+        "introduces": [],
+        "hint": "Считаем буквы в слове.",
+        "explain": "`input()` кладёт Кедр в `name`, а `len` считает буквы. В слове Кедр их четыре.",
+        "feedback_correct": "Верно, четыре буквы.",
+        "feedback_wrong": "Почти. `len` считает буквы в слове.",
+        "code": [
+          "name = input(\"Позывной? \")",
+          "print(len(name))"
+        ],
+        "stdin": [
+          "Кедр"
+        ]
+      },
+      "id": "n3"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "single",
+        "prompt": "Что возвращает `input()`, даже если набраны цифры?",
+        "requires": [
+          "input",
+          "types"
+        ],
+        "introduces": [],
+        "hint": "Вспомни правило вчерашнего дня.",
+        "explain": "`input()` всегда даёт текст. Число из него делают командой `int()` или `float()`.",
+        "feedback_correct": "Да, всегда текст.",
+        "feedback_wrong": "Не совсем. Ответ `input()` — всегда строка.",
+        "options": [
+          "Текст",
+          "Целое число",
+          "Дробное число"
+        ],
+        "answer": 0
+      },
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Помнишь, ПС-1 за 92 дня сделал 1440 витков? Прибавим к номеру витка ещё один.",
+      "id": "n5"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "fill",
+        "prompt": "Допиши код: следующий виток после введённого номера.",
+        "requires": [
+          "int_cast",
+          "input"
+        ],
+        "introduces": [],
+        "hint": "Внутри то, что спрашивает, снаружи — то, что делает число целым.",
+        "explain": "`input()` получает текст, `int()` превращает его в число, и тогда `+ 1` работает.",
+        "feedback_correct": "Готово!",
+        "feedback_wrong": "Почти. Внутри `input`, снаружи `int`.",
+        "code": [
+          "turn = {{0}}({{1}}())",
+          "print(turn + 1)"
+        ],
+        "chips": [
+          "int",
+          "input",
+          "print",
+          "str"
+        ],
+        "answer": [
+          0,
+          1
+        ]
+      },
+      "id": "n6"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "А я вчера написал строку про позывной и снова получил красный текст…",
+      "id": "n7"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "find_bug",
+        "prompt": "Макс хотел вывести «Букв: 4». В какой строке ошибка?",
+        "requires": [
+          "str_cast",
+          "len"
+        ],
+        "introduces": [],
+        "hint": "Текст склеивается только с текстом.",
+        "explain": "В строке 2 текст «Букв: » склеивается с числом `len(name)`. Число нужно превратить командой `str()`.",
+        "feedback_correct": "Да, строка 2.",
+        "feedback_wrong": "Не там. Ищи, где текст склеивается с числом.",
+        "code": [
+          "name = \"Кедр\"",
+          "print(\"Букв: \" + len(name))",
+          "print(\"Конец связи\")"
+        ],
+        "answer": 2
+      },
+      "id": "n8"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "predict",
+        "prompt": "Мощность 12.5 Вт, три часа. Что появится на экране?",
+        "requires": [
+          "float_cast",
+          "round"
+        ],
+        "introduces": [],
+        "hint": "Умножь и округли до десятых.",
+        "explain": "`float` делает из текста дробное число, умножение даёт 37.5, `round(..., 1)` оставляет один знак.",
+        "feedback_correct": "Верно, 37.5.",
+        "feedback_wrong": "Почти. Умножаем 12.5 на 3 и округляем до десятых.",
+        "code": [
+          "power = float(\"12.5\")",
+          "print(round(power * 3, 1))"
+        ]
+      },
+      "id": "n9"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Разминка пройдена! Теперь к доске: Ольга расскажет, как считать и оформлять без лишних усилий.",
+      "id": "n10"
+    },
+    {
+      "type": "flag",
+      "set": "warmup1_done",
+      "id": "n11"
+    },
+    {
+      "type": "end",
+      "id": "n12"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+/* Screen layouts. */
+
+/* studio hub */
+.studio { position: relative; border: var(--outline-w) solid var(--line); border-radius: var(--r3); overflow: hidden; box-shadow: var(--shadow-soft); }
+.studio svg { display: block; }
+.hotspot-label {
+  position: absolute; transform: translate(-50%, -50%); pointer-events: none;
+  padding: 4px 12px; border-radius: var(--r-pill); background: var(--surface); border: 2px solid var(--line);
+  font-weight: 700; font-size: clamp(11px, 1.3vw, calc(15px * var(--text-scale))); white-space: nowrap; box-shadow: 0 2px 0 var(--line);
+}
+.studio-nav { justify-content: center; }
+@media (max-width: 640px) { .hotspot-label { display: none; } }
+
+/* order cards */
+.order-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.order-card { display: flex; flex-direction: column; gap: var(--s2); }
+.order-card > .btn, .order-card > .order-foot { margin-top: auto; }
+.order-head { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: var(--s2); align-items: center; }
+.order-card.locked { opacity: .75; border-style: dashed; }
+
+/* order build step: client card | code | client screen */
+.build { display: grid; gap: var(--s3); grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); grid-template-areas: "client code" "client screen"; align-items: start; }
+.build-client { grid-area: client; position: sticky; top: 76px; }
+.build-code { grid-area: code; }
+.build-screen { grid-area: screen; }
+.mobile-tabs { display: none; grid-column: 1 / -1; }
+@media (max-width: 860px) {
+  .build { grid-template-columns: 1fr; grid-template-areas: "tabs" "client" "code" "screen"; }
+  .build-client { position: static; }
+  .mobile-tabs { display: flex; grid-area: tabs; }
+  .build[data-tab="dialog"] .build-code, .build[data-tab="dialog"] .build-screen { display: none; }
+  .build[data-tab="code"] .build-client, .build[data-tab="code"] .build-screen { display: none; }
+  .build[data-tab="screen"] .build-client, .build[data-tab="screen"] .build-code { display: none; }
+}
+
+/* shop */
+.shop-layout { display: grid; gap: var(--s3); grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr); align-items: start; }
+@media (max-width: 860px) { .shop-layout { grid-template-columns: 1fr; } }
+
+/* plan */
+.plan-table { border-collapse: collapse; width: 100%; }
+.plan-table th, .plan-table td { text-align: left; vertical-align: top; padding: var(--s1) var(--s2); border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+/* narrow screens: long words wrap instead of widening the page */
+@media (max-width: 560px) {
+  .plan-table td { overflow-wrap: anywhere; padding: var(--s1); }
+  .plan-table th { padding: var(--s1); overflow-wrap: normal; }
+  .plan-table { font-size: var(--fs-small); }
+  /* «label | value» rows: the label goes above the value instead of breaking into syllables */
+  .plan-table tr:has(> th[scope="row"]) { display: grid; padding: var(--s1) 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+  .plan-table tr:has(> th[scope="row"]) > * { border-bottom: 0; padding: 0 var(--s1); }
+}
+.vars th, .vars td { padding: 6px 8px; border-bottom: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); }
+
+@media print {
+  .topbar, .btn { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+}
+
+/* parsons */
+.parsons { display: grid; gap: var(--s3); grid-template-columns: 1fr 1fr; }
+.parsons h3 { font-size: var(--fs-small); }
+.parsons-col { display: grid; gap: var(--s1); align-content: start; min-height: 140px; padding: var(--s2); border: 2px dashed color-mix(in srgb, var(--ink) 45%, transparent); border-radius: var(--r2); }
+.parsons-line { display: flex; align-items: center; gap: var(--s1); min-height: var(--tap); padding: var(--s1) var(--s2); background: var(--code-bg); border: 2px solid var(--line); border-radius: var(--r1); font-family: var(--font-code); font-size: var(--fs-code); }
+.parsons-line code { background: none; border: 0; padding: 0; flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: pre-wrap; tab-size: 4; } /* indentation matters in Python */
+@media (max-width: 720px) { .parsons { grid-template-columns: 1fr; } }
+
+/* printable kit (/#/print/:n) */
+.print-sheet { display: grid; gap: var(--s2); padding: var(--s4); margin-top: var(--s4); background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--r2); }
+.print-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s2); font-size: var(--fs-small);
+  border-bottom: 1px solid var(--line); padding-bottom: var(--s1); }
+.print-cards { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.print-card { border: 1px solid var(--line); border-radius: var(--r1); padding: var(--s2) var(--s3); display: grid; gap: 4px; break-inside: avoid; }
+.print-card h3 { margin: 0; }
+.print-card p { margin: 0; }
+.print-code { margin: 0; padding: 6px 8px; background: var(--surface-2); border-radius: 8px; font-family: var(--font-code);
+  font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.print-lines { display: grid; gap: 0; }
+.print-lines span { display: block; height: 2em; border-bottom: 1px solid color-mix(in srgb, var(--ink) 35%, transparent); }
+.print-questions { display: grid; gap: var(--s2); padding-left: 1.4em; }
+.print-questions p { margin: 0; }
+.print-reqs { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.print-scale td:not(:first-child), .print-scale th:not(:first-child) { text-align: center; width: 6.5em; }
+@media print {
+  .no-print { display: none !important; }
+  .page.read.print-kit { max-width: none; padding: 0; }
+  .print-sheet { break-before: page; border: 0; padding: 0; margin: 0; background: #fff; }
+  .print-sheet:first-of-type { break-before: auto; }
+  .print-code { background: #f2f2f2; color: #000; }
+  .print-head { border-color: #000; }
+}

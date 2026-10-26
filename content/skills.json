@@ -1,0 +1,277 @@
+[
+  {
+    "id": "run_program",
+    "title": "Что такое программа и запуск",
+    "lesson": 0,
+    "requires": []
+  },
+  {
+    "id": "print",
+    "title": "Вывод print()",
+    "lesson": 0,
+    "requires": [
+      "run_program"
+    ]
+  },
+  {
+    "id": "strings",
+    "title": "Строки и кавычки",
+    "lesson": 0,
+    "requires": [
+      "print"
+    ]
+  },
+  {
+    "id": "variables",
+    "title": "Переменные",
+    "lesson": 0,
+    "requires": [
+      "strings"
+    ]
+  },
+  {
+    "id": "input",
+    "title": "Ввод input()",
+    "lesson": 0,
+    "requires": [
+      "variables"
+    ]
+  },
+  {
+    "id": "types",
+    "title": "Типы данных: str и int",
+    "lesson": 0,
+    "requires": [
+      "variables"
+    ]
+  },
+  {
+    "id": "int_cast",
+    "title": "Превращение в целое: int()",
+    "lesson": 0,
+    "requires": [
+      "input",
+      "types"
+    ]
+  },
+  {
+    "id": "float_cast",
+    "title": "Дробные числа: float()",
+    "lesson": 0,
+    "requires": [
+      "int_cast"
+    ]
+  },
+  {
+    "id": "arithmetic",
+    "title": "Арифметика",
+    "lesson": 0,
+    "requires": [
+      "types"
+    ]
+  },
+  {
+    "id": "round",
+    "title": "Округление round()",
+    "lesson": 0,
+    "requires": [
+      "float_cast",
+      "arithmetic"
+    ]
+  },
+  {
+    "id": "len",
+    "title": "Длина строки len()",
+    "lesson": 0,
+    "requires": [
+      "strings",
+      "variables"
+    ]
+  },
+  {
+    "id": "str_cast",
+    "title": "Превращение в текст: str()",
+    "lesson": 0,
+    "requires": [
+      "types"
+    ]
+  },
+  {
+    "id": "debugging",
+    "title": "Чтение ошибок и отладка",
+    "lesson": 0,
+    "requires": [
+      "print"
+    ]
+  },
+  {
+    "id": "int_div",
+    "title": "Деление нацело // и остаток %",
+    "lesson": 1,
+    "requires": [
+      "arithmetic"
+    ]
+  },
+  {
+    "id": "fstring",
+    "title": "f-строки",
+    "lesson": 1,
+    "requires": [
+      "str_cast",
+      "variables"
+    ]
+  },
+  {
+    "id": "str_methods",
+    "title": "Методы строк",
+    "lesson": 1,
+    "requires": [
+      "strings",
+      "variables"
+    ]
+  },
+  {
+    "id": "refactor",
+    "title": "Доработка готового кода",
+    "lesson": 1,
+    "requires": [
+      "debugging"
+    ]
+  },
+  {
+    "id": "compare",
+    "title": "Сравнения",
+    "lesson": 2,
+    "requires": [
+      "types"
+    ]
+  },
+  {
+    "id": "if_else",
+    "title": "Условие if / else",
+    "lesson": 2,
+    "requires": [
+      "compare"
+    ]
+  },
+  {
+    "id": "elif",
+    "title": "Ветвление elif",
+    "lesson": 2,
+    "requires": [
+      "if_else"
+    ]
+  },
+  {
+    "id": "logic",
+    "title": "and / or / not",
+    "lesson": 2,
+    "requires": [
+      "compare",
+      "if_else"
+    ]
+  },
+  {
+    "id": "input_check",
+    "title": "Проверка ввода",
+    "lesson": 2,
+    "requires": [
+      "if_else",
+      "int_cast"
+    ]
+  },
+  {
+    "id": "while",
+    "title": "Цикл while",
+    "lesson": 3,
+    "requires": [
+      "if_else"
+    ]
+  },
+  {
+    "id": "for_range",
+    "title": "Цикл for и range()",
+    "lesson": 3,
+    "requires": [
+      "while"
+    ]
+  },
+  {
+    "id": "counter",
+    "title": "Счётчик",
+    "lesson": 3,
+    "requires": [
+      "while"
+    ]
+  },
+  {
+    "id": "accumulator",
+    "title": "Накопитель (сумма)",
+    "lesson": 3,
+    "requires": [
+      "for_range",
+      "arithmetic"
+    ]
+  },
+  {
+    "id": "break_continue",
+    "title": "break и continue",
+    "lesson": 3,
+    "requires": [
+      "while"
+    ]
+  },
+  {
+    "id": "max_search",
+    "title": "Поиск максимума",
+    "lesson": 3,
+    "requires": [
+      "accumulator",
+      "compare"
+    ]
+  },
+  {
+    "id": "collections",
+    "title": "Коллекции: список и словарь",
+    "lesson": 4,
+    "requires": [
+      "for_range",
+      "str_methods"
+    ]
+  },
+  {
+    "id": "functions",
+    "title": "Свои функции: def и return",
+    "lesson": 4,
+    "requires": [
+      "collections",
+      "if_else"
+    ]
+  },
+  {
+    "id": "files_libs",
+    "title": "Разбор данных и модуль math",
+    "lesson": 4,
+    "requires": [
+      "collections",
+      "while"
+    ]
+  },
+  {
+    "id": "classes",
+    "title": "Классы и объекты",
+    "lesson": 4,
+    "requires": [
+      "functions"
+    ]
+  },
+  {
+    "id": "bots",
+    "title": "Бот: обработчик команд",
+    "lesson": 4,
+    "requires": [
+      "functions",
+      "elif"
+    ]
+  }
+]

@@ -1,0 +1,37 @@
+/* Style v2 prototype: dialogue in the scene + preview page. Values from tokens.css. */
+.v2-page { min-height: 100vh; background: var(--bg); }
+.v2-scene { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: calc(100vh - 140px); overflow: hidden;
+  border: var(--outline-w) solid var(--c-ink); border-radius: var(--r3); background: var(--c-wall); margin-inline: auto; }
+.v2-scene > svg { position: absolute; inset: 0; }
+
+/* speech bubble near the speaker, tail pointing to them */
+.v2-talk { position: absolute; left: 47%; top: 7%; width: min(560px, 48%); display: grid; gap: var(--s2); justify-items: end; }
+.v2-bubble { position: relative; justify-self: stretch; background: var(--c-cream); color: var(--c-ink); border: 2.5px solid var(--c-ink);
+  border-radius: 22px; padding: var(--s3) var(--s4); box-shadow: 0 5px 0 var(--c-drop), 0 12px 24px var(--c-drop);
+  font-size: clamp(16px, 1.7vw, calc(22px * var(--text-scale))); line-height: 1.45; font-weight: 600; }
+.v2-bubble::before { content: ''; position: absolute; left: -18px; top: 38px; width: 26px; height: 26px; background: var(--c-cream);
+  border-left: 2.5px solid var(--c-ink); border-bottom: 2.5px solid var(--c-ink); transform: rotate(45deg); border-bottom-left-radius: 6px; }
+.v2-name { position: absolute; top: -16px; left: 22px; padding: 2px 12px; border-radius: var(--r-pill); background: var(--c-navy); color: var(--c-cream);
+  border: 2px solid var(--c-ink); font-size: clamp(12px, 1.1vw, calc(15px * var(--text-scale))); font-weight: 800; letter-spacing: .04em; line-height: 1.6; }
+.v2-choices { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--s2); }
+.v2-choice { min-height: var(--tap); padding: 0 var(--s4); border-radius: 16px; border: 2.5px solid var(--c-ink); background: var(--c-cream);
+  color: var(--c-ink); font: inherit; font-weight: 700; font-size: clamp(15px, 1.5vw, calc(19px * var(--text-scale))); cursor: pointer;
+  box-shadow: 0 4px 0 var(--c-ink); display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  transition: transform .12s cubic-bezier(.3, 1.6, .5, 1), box-shadow .12s, background-color .15s; }
+.v2-choice:hover { background: var(--c-wall); transform: translateY(-2px); box-shadow: 0 6px 0 var(--c-ink); }
+.v2-choice:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--c-ink); }
+.v2-choice.main { background: var(--c-navy); color: var(--c-cream); }
+.v2-key { width: 24px; height: 24px; border-radius: 7px; border: 2px solid currentColor; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; opacity: .75; line-height: 1; }
+@media (max-width: 720px) {
+  .v2-talk { left: 4%; right: 4%; top: auto; bottom: 4%; width: auto; }
+  .v2-bubble::before { display: none; }
+}
+
+/* preview page */
+.v2-grid { display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.v2-card { display: grid; justify-items: center; align-content: end; gap: var(--s1); padding: var(--s2); border-radius: var(--r2);
+  background: var(--c-wall); border: 2px solid var(--c-ink-bg); }
+.v2-card svg { width: 100%; height: auto; max-width: 180px; }
+.v2-compare { display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); align-items: stretch; }
+.v2-lineup { display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); align-items: stretch; }

@@ -1,0 +1,37 @@
+# «Поехали!»: сервер урока + изолированный сервис проверки кода.
+#   BUREAU_TEACHER_PASSWORD=придумайте-пароль docker compose up --build
+#   (необязательно) BUREAU_PUBLIC_URL=http://192.168.1.10:8000 — адрес, который сервер покажет ученикам
+# Ученики: http://<адрес компьютера>:8000/   Преподаватель: http://<адрес>:8000/#/teacher
+services:
+  app:
+    build: { context: ., dockerfile: server/Dockerfile }
+    ports: ["8000:8000"]
+    environment:
+      BUREAU_TEACHER_PASSWORD: ${BUREAU_TEACHER_PASSWORD:-}
+      BUREAU_CHECKER_URL: http://checker:8001
+      BUREAU_PUBLIC_URL: ${BUREAU_PUBLIC_URL:-}
+    volumes: ["bureau-data:/app/server/data"]
+    networks: [default, check]
+    depends_on: [checker]
+    restart: unless-stopped
+
+  # Runs student programs (the judge) — no internet, read-only file system, no privileges.
+  checker:
+    build: { context: ., dockerfile: server/Dockerfile }
+    command: ["python", "-m", "bureau_server.checker", "--serve", "--host", "0.0.0.0", "--port", "8001"]
+    networks: [check]
+    read_only: true
+    tmpfs: ["/tmp:size=16m"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 768m
+    cpus: 1.0
+    restart: unless-stopped
+
+networks:
+  check:
+    internal: true      # the checker cannot reach the internet or the local network
+
+volumes:
+  bureau-data:

@@ -1,0 +1,130 @@
+{
+  "id": "d4-closing",
+  "lesson": 4,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "studio",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [
+        {
+          "who": "gromov",
+          "pos": "center",
+          "mood": "joy"
+        },
+        {
+          "who": "vika",
+          "pos": "right",
+          "mood": "joy"
+        }
+      ],
+      "title": "Зал бюро, 18:00",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "joy",
+      "text": "Вот и все пять отделов. Архив, цех, хранилище, конструкторы и связь.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Это был только взгляд в будущее. Каждая тема потом станет отдельным занятием с десятком заданий.",
+      "id": "n3"
+    },
+    {
+      "type": "choice",
+      "prompt": "Что запомнилось больше всего?",
+      "options": [
+        {
+          "text": "Списки и словари",
+          "next": "n5"
+        },
+        {
+          "text": "Свои функции",
+          "next": "n6"
+        },
+        {
+          "text": "Класс и объект",
+          "next": "n7"
+        },
+        {
+          "text": "Бот для ЦУПа",
+          "next": "n8"
+        }
+      ],
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Один список вместо десяти переменных. Это спасает от хаоса.",
+      "next": "n9",
+      "id": "n5"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Функция — как кнопка: нажал и не думаешь, как внутри.",
+      "next": "n9",
+      "id": "n6"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Чертёж один, спутников сколько угодно. Удобно!",
+      "next": "n9",
+      "id": "n7"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Настоящего бота запусти дома в IDE. Токен — секрет, не показывай его никому.",
+      "id": "n8"
+    },
+    {
+      "type": "choice",
+      "prompt": "Пора прощаться",
+      "options": [
+        {
+          "text": "Спасибо вам всем"
+        },
+        {
+          "text": "До новых отделов!"
+        }
+      ],
+      "id": "n9"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "joy",
+      "text": "И вам спасибо, коллеги. Бюро «Космос» растёт вместе с вами.\nПоехали!",
+      "id": "n10"
+    },
+    {
+      "id": "quote_of_day",
+      "type": "quote",
+      "quote": "gagarin_planet"
+    },
+    {
+      "type": "flag",
+      "set": "lesson4_demo_done",
+      "id": "n11"
+    },
+    {
+      "type": "end",
+      "id": "n12"
+    }
+  ]
+}

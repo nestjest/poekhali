@@ -1,0 +1,238 @@
+{
+  "id": "l3-briefing",
+  "lesson": 3,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "board",
+      "time": "day",
+      "transition": "slide",
+      "cast": [
+        {
+          "who": "vika",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "max",
+          "pos": "right",
+          "mood": "puzzled"
+        }
+      ],
+      "title": "Планёрка",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Привет! Макс снова на стенде, а ты — его второй пилот.\nОльга всё рассказала, теперь пробуем.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "Я написал обратный отсчёт, и он не заканчивается. Уже третью минуту считает «3, 3, 3».\nЧайник остыл.",
+      "id": "n3"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "single",
+        "prompt": "Что нужно добавить в цикл Макса?",
+        "requires": [
+          "while"
+        ],
+        "introduces": [],
+        "hint": "Что должно меняться, чтобы условие когда-нибудь стало ложным?",
+        "explain": "Условие проверяет n. Если n не меняется, цикл вечный, поэтому внутри n надо уменьшать.",
+        "feedback_correct": "Верно, уменьшаем n.",
+        "feedback_wrong": "Не то. Условие следит за n, значит, n и должно меняться.",
+        "code": [
+          "n = 3",
+          "while n > 0:",
+          "    print(n)"
+        ],
+        "options": [
+          "`n -= 1` внутри цикла",
+          "`n = 3` после цикла",
+          "`break` перед циклом"
+        ],
+        "answer": 0
+      },
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Ура, считает до нуля! Теперь снимки: хочу номера с 1 по 5, а написал `range(1, 5)`.",
+      "id": "n5"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "predict",
+        "prompt": "Что напечатает программа Макса?",
+        "requires": [
+          "for_range"
+        ],
+        "introduces": [],
+        "hint": "Конец range не входит.",
+        "explain": "`range(1, 5)` даёт 1, 2, 3 и 4. Пятёрки нет — это «ошибка на единицу».",
+        "feedback_correct": "Да, пятого снимка нет.",
+        "feedback_wrong": "Почти. Правая граница не входит, пятого не будет.",
+        "code": [
+          "for i in range(1, 5):",
+          "    print(i)"
+        ]
+      },
+      "id": "n6"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Нужен `range(1, 6)`",
+          "next": "n8"
+        },
+        {
+          "text": "Нужен `range(0, 5)`",
+          "next": "n9"
+        }
+      ],
+      "prompt": "Как это починить?",
+      "id": "n7"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Точно: конец range — на единицу больше нужного!",
+      "next": "n10",
+      "id": "n8"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "thinking",
+      "text": "С нуля получатся 0…4. Нужно начать с 1 и закончить на 5, а значит, `range(1, 6)`.",
+      "id": "n9"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Теперь про строки. Макс считает вводы до слова «стоп», но счётчик почему-то всегда один.",
+      "id": "n10"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "find_bug",
+        "prompt": "В какой строке ошибка?",
+        "requires": [
+          "counter"
+        ],
+        "introduces": [],
+        "hint": "Счётчик должен расти, а не получать одно значение.",
+        "explain": "В четвёртой строке `count = 1` каждый раз кладёт единицу. Нужно прибавлять: `count += 1`.",
+        "feedback_correct": "Да, строка 4: счётчик не растёт.",
+        "feedback_wrong": "Не там. Ищи, где счётчик получает значение вместо прибавки.",
+        "code": [
+          "count = 0",
+          "line = input()",
+          "while line != \"стоп\":",
+          "    count = 1",
+          "    line = input()"
+        ],
+        "answer": 4
+      },
+      "id": "n11"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "Ещё хочу пропускать пустые строки и идти дальше. Что для этого нужно?",
+      "id": "n12"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "single",
+        "prompt": "Какое слово пропускает остаток прохода и идёт дальше?",
+        "requires": [
+          "break_continue"
+        ],
+        "introduces": [],
+        "hint": "Остановить весь цикл или только один проход?",
+        "explain": "`continue` пропускает остаток прохода, цикл идёт дальше. `break` обрывает цикл целиком.",
+        "feedback_correct": "Верно, `continue`.",
+        "feedback_wrong": "Почти. `break` остановил бы весь цикл, а нужен только пропуск.",
+        "options": [
+          "`continue`",
+          "`break`",
+          "`stop`"
+        ],
+        "answer": 0
+      },
+      "id": "n13"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Теперь самостоятельно: сложи числа от 1 до 5. Накопитель и цикл — всё, что нужно.",
+      "id": "n14"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "tiny_code",
+        "prompt": "Выведи сумму чисел от 1 до 5.",
+        "requires": [
+          "accumulator"
+        ],
+        "introduces": [],
+        "hint": "Накопитель создают до цикла.",
+        "explain": "`total = 0`, затем в цикле `total += i`, и в конце `print(total)`. Не забудь, что конец range не входит.",
+        "feedback_correct": "Сумма сошлась!",
+        "feedback_wrong": "Не вышло. Проверь начало накопителя и границы range.",
+        "starter": [
+          "# накопитель и цикл for"
+        ],
+        "reference": [
+          "total = 0",
+          "for i in range(1, 6):",
+          "    total += i",
+          "print(total)"
+        ],
+        "expected_stdout": [
+          "15"
+        ]
+      },
+      "id": "n15"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Отлично! Илья уже ждёт у окна заданий.",
+      "id": "n16"
+    },
+    {
+      "type": "unlock",
+      "feature": "orders",
+      "text": "Задания занятия 3 открыты",
+      "id": "n17"
+    },
+    {
+      "type": "end",
+      "id": "n18"
+    }
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "id": "l1-review",
+  "lesson": 1,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "desk",
+      "time": "evening",
+      "transition": "slide",
+      "cast": [
+        {
+          "who": "vika",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "max",
+          "pos": "right",
+          "mood": "puzzled"
+        }
+      ],
+      "title": "Разбор полётов",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Вечерний разбор. Макс принёс код, который сегодня не сошёлся с ответом.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "Ничего не падает, а числа странные. Я уже ничему не удивляюсь.",
+      "id": "n3"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Тихие баги — самые интересные",
+          "next": "n5"
+        },
+        {
+          "text": "Показывай, разберём",
+          "next": "n6"
+        }
+      ],
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Ты меня успокоил. Вот первый.",
+      "next": "n7",
+      "id": "n5"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "neutral",
+      "text": "Держи.",
+      "id": "n6"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "find_bug",
+        "prompt": "Для 5772 секунд выводит «96.2 мин 12 с». Где баг?",
+        "requires": [
+          "int_div",
+          "fstring"
+        ],
+        "introduces": [],
+        "hint": "Какое деление даёт целую часть?",
+        "explain": "В строке 2 стоит `/`, которое даёт дробь. Нужно `//`, оно считает только целые минуты.",
+        "feedback_correct": "Да, строка 2.",
+        "feedback_wrong": "Не там. Посмотри, как считаются минуты.",
+        "code": [
+          "seconds = int(input(\"Секунд? \"))",
+          "minutes = seconds / 60",
+          "print(f\"{minutes} мин {seconds % 60} с\")"
+        ],
+        "answer": 2
+      },
+      "id": "n7"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Второй баг тоже без красного текста. Макс чистит название станции.",
+      "id": "n8"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "find_bug",
+        "prompt": "Названия печатаются с пробелами по краям. Где баг?",
+        "requires": [
+          "str_methods"
+        ],
+        "introduces": [],
+        "hint": "Результат метода нужно куда-то положить.",
+        "explain": "В строке 2 результат `.strip()` не сохранён, поэтому `name` не изменилась. Нужно `name = name.strip()`.",
+        "feedback_correct": "Верно, строка 2.",
+        "feedback_wrong": "Не там. Спроси себя, что стало с результатом `.strip()`.",
+        "code": [
+          "name = input(\"Станция? \")",
+          "name.strip()",
+          "print(name.title())"
+        ],
+        "answer": 2
+      },
+      "id": "n9"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "puzzled",
+      "text": "Ой, метод же не меняет строку. Ольга утром про это говорила.",
+      "id": "n10"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Бывает с каждым",
+          "next": "n12"
+        },
+        {
+          "text": "Запиши это себе на лоб",
+          "next": "n13"
+        }
+      ],
+      "id": "n11"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Правильное отношение. Дальше.",
+      "next": "n14",
+      "id": "n12"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Нет уж, лучше в Тетрадь инженера.",
+      "id": "n13"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "predict",
+        "prompt": "Что выведет код Макса?",
+        "requires": [
+          "fstring"
+        ],
+        "introduces": [],
+        "hint": "Нет ли чего-то перед кавычками?",
+        "explain": "Без буквы f фигурные скобки не подставляют значение. Текст выводится как есть, вместе с `{n}`.",
+        "feedback_correct": "Верно, без подстановки.",
+        "feedback_wrong": "Почти. Без буквы f скобки остаются в тексте.",
+        "code": [
+          "n = 3",
+          "print(\"Витков: {n}\")"
+        ]
+      },
+      "id": "n14"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Последнее. Макс добавляет запас 10 % и пишет `total = fuel * 0.1`.",
+      "id": "n15"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "single",
+        "prompt": "Что получится у Макса при fuel = 20?",
+        "requires": [
+          "arithmetic",
+          "refactor"
+        ],
+        "introduces": [],
+        "hint": "Умножение на 0.1 — это одна десятая часть.",
+        "explain": "`fuel * 0.1` — это только десять процентов от топлива, то есть 2. Нужно `fuel * 1.1`.",
+        "feedback_correct": "Да, получится 2.0.",
+        "feedback_wrong": "Не то. Умножение на 0.1 даёт одну десятую.",
+        "options": [
+          "22.0",
+          "2.0",
+          "20.0"
+        ],
+        "answer": 1
+      },
+      "id": "n16"
+    },
+    {
+      "type": "check",
+      "check": {
+        "kind": "predict",
+        "prompt": "Макс проверяет остаток. Что выведет код?",
+        "requires": [
+          "int_div"
+        ],
+        "introduces": [],
+        "hint": "Считай по частям: сначала остаток, потом деление нацело.",
+        "explain": "17 % 5 равно 2, 17 // 5 равно 3. Сумма 5.",
+        "feedback_correct": "Верно, пять.",
+        "feedback_wrong": "Почти. Остаток 2, а деление нацело даёт 3.",
+        "code": [
+          "print(17 % 5 + 17 // 5)"
+        ]
+      },
+      "id": "n17"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Все баги найдены! Макс, видишь: теперь читать чужой код у нас получается.",
+      "id": "n18"
+    },
+    {
+      "type": "say",
+      "who": "max",
+      "mood": "joy",
+      "text": "Вижу. И даже свой иногда.",
+      "id": "n19"
+    },
+    {
+      "type": "flag",
+      "set": "day2_review_done",
+      "id": "n20"
+    },
+    {
+      "type": "end",
+      "id": "n21"
+    }
+  ]
+}

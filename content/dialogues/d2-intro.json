@@ -1,0 +1,189 @@
+{
+  "id": "d2-intro",
+  "lesson": 2,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "studio",
+      "time": "morning",
+      "transition": "fade",
+      "cast": [
+        {
+          "who": "sokolov",
+          "pos": "center",
+          "mood": "neutral"
+        }
+      ],
+      "title": "Среда, 8:55",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "neutral",
+      "text": "Доброе утро, инженер. Докладываю обстановку: северный посёлок остался без связи.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "neutral",
+      "text": "Нужен малый спутник связи «Северок». Заказчик уже в бюро.",
+      "id": "n3"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Что случилось с посёлком?",
+          "next": "n5"
+        },
+        {
+          "text": "Кто заказчик?",
+          "next": "n6"
+        }
+      ],
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "neutral",
+      "text": "Зимой связь там пропадает на недели. Школа и фельдшерский пункт сидят на одной рации.",
+      "id": "n5",
+      "next": "n7"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "joy",
+      "text": "Глава посёлка, Фёдор Кузьмич. Человек неторопливый, но дело знает.",
+      "id": "n6",
+      "next": "n7"
+    },
+    {
+      "type": "scene",
+      "location": "counter",
+      "time": "morning",
+      "transition": "slide",
+      "cast": [
+        {
+          "who": "fedor",
+          "pos": "center",
+          "mood": "joy"
+        },
+        {
+          "who": "sokolov",
+          "pos": "right",
+          "mood": "neutral"
+        }
+      ],
+      "title": "Окно заданий",
+      "id": "n7"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "joy",
+      "text": "Здравствуйте, молодёжь! У нас на Севере зима долгая, а связь короткая — вот и приехал за спутником.",
+      "id": "n8"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "neutral",
+      "text": "Спутник зовут «Северок». Над посёлком он пролетает, когда хочет, а ваша программа решает: связь есть или подождём.",
+      "id": "n9"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Почему «Северок»?",
+          "next": "n11"
+        },
+        {
+          "text": "Как программа это решит?",
+          "next": "n12"
+        },
+        {
+          "text": "Чем помочь?",
+          "next": "n13"
+        }
+      ],
+      "id": "n10"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "joy",
+      "text": "В честь нашего ветра. Лёгкий, но дует всегда в нужную сторону.",
+      "id": "n11",
+      "next": "n14"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "neutral",
+      "text": "Узнаем сегодня. Ей нужна команда «если… иначе…».",
+      "id": "n12",
+      "next": "n14"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "neutral",
+      "text": "Научите программу понимать, когда связь есть, а когда ждать. Остальное мы сами.",
+      "id": "n13",
+      "next": "n14"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "thinking",
+      "text": "Знаете, Плесецк — самый северный космодром России. Так что мы, северяне, к космосу ближе, чем кажется.",
+      "id": "n14"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Начнём с разминки.",
+          "next": "n16"
+        },
+        {
+          "text": "А чай у вас на Севере какой?",
+          "next": "n17"
+        }
+      ],
+      "id": "n15"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "joy",
+      "text": "Хороший план. Вика уже ждёт на рабочем месте.",
+      "id": "n16",
+      "next": "n18"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "joy",
+      "text": "Крепкий, с брусникой. Приедете — угощу.",
+      "id": "n17",
+      "next": "n18"
+    },
+    {
+      "type": "flag",
+      "set": "intro_done",
+      "id": "n18"
+    },
+    {
+      "type": "end",
+      "id": "n19"
+    }
+  ]
+}

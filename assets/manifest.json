@@ -1,0 +1,124 @@
+{
+  "$comment": "Описание процедурных SVG-иллюстраций курса «Поехали!» (сеттинг — Бюро «Космос») (src/art). Стиль v2 — «объёмный плакат»: пастель, cel-shading (одна тень снизу справа и блик сверху слева), тонкие тёплые контуры, у фона мягче (docs/world.md §9). Чтобы заменить на готовую графику без правок кода, подставьте файлы по полю replacement и подключите в соответствующем компоненте.",
+  "version": 3,
+  "palette": "frontend/src/styles/tokens.css (--c-* для стиля v2; --art-* — устаревшие)",
+  "sharedKit": "frontend/src/art/shapes.tsx (Rocket, Flame, Satellite, Fir, Cloud, Star, Spark, Earth, Bush, GlassMug, Floor, StarFrieze); frontend/src/art/v2/shade.tsx (Part, Silhouette, Line, SoftShadow); frontend/src/art/v2/scene.tsx (Bg, Sky, Sun, Glow, TimeTint, Tree, FirTree, Hangar, Lattice, Ridge, smooth, blob)",
+  "characterViewBox": "0 0 240 300 (по пояс)",
+  "moods": ["neutral", "joy", "puzzled", "annoyed", "thinking"],
+  "layers": ["body", "neck", "neckwear", "hair-back", "head", "hair-front", "face", "accessories", "mood-extras"],
+  "characters": [
+    { "id": "olga", "name": "Ольга", "role": "инструктор отдела подготовки", "skin": "art-skin-1", "hair": "art-hair-1", "layers": ["navy-jacket", "blouse", "rocket-pin", "bob-hair", "earrings", "pointer"], "replacement": "assets/characters/olga-{mood}.svg" },
+    { "id": "vika", "name": "Вика", "role": "ведущий инженер бортового ПО", "skin": "art-skin-2", "hair": "art-hair-3", "layers": ["work-jacket-red-stripe", "rocket-pin", "headset-on-neck", "ponytail", "hair-tie"], "replacement": "assets/characters/vika-{mood}.svg" },
+    { "id": "max", "name": "Макс", "role": "стажёр", "skin": "art-skin-1", "hair": "art-hair-2", "layers": ["orange-hoodie", "hood", "strings", "satellite-patch", "cowlick", "freckles"], "replacement": "assets/characters/max-{mood}.svg" },
+    { "id": "gromov", "name": "Андрей Ильич Громов", "role": "главный конструктор", "skin": "art-skin-1", "hair": "art-hair-4", "layers": ["dark-suit", "tie", "grey-moustache", "rect-glasses", "side-hair", "approval-folder"], "replacement": "assets/characters/gromov-{mood}.svg" },
+    { "id": "zoya", "name": "Зоя Андреевна", "role": "учитель физики, кружок «Юный космонавт»", "skin": "art-skin-2", "hair": "art-hair-3", "layers": ["green-cardigan", "blue-blouse", "star-pin", "bun", "pencil-in-bun", "round-glasses"], "replacement": "assets/characters/zoya-{mood}.svg" },
+    { "id": "sokolov", "name": "Сергей Павлович Соколов", "role": "сменный руководитель ЦУПа", "skin": "art-skin-3", "hair": "art-hair-2", "layers": ["navy-uniform", "epaulettes", "crew-cut", "operator-headset", "heavy-brows"], "replacement": "assets/characters/sokolov-{mood}.svg" },
+    { "id": "kira", "name": "Кира", "role": "начальник отдела баллистики", "skin": "art-skin-1", "hair": "art-hair-2", "layers": ["red-turtleneck", "orbit-emblem", "sharp-bob", "red-streak", "pencil-behind-ear"], "replacement": "assets/characters/kira-{mood}.svg" },
+    { "id": "tamara", "name": "Тамара Ильинична", "role": "синоптик метеостанции", "skin": "art-skin-2", "hair": "art-hair-4", "layers": ["orange-sweater", "cloud-brooch", "curly-grey-hair", "earrings"], "replacement": "assets/characters/tamara-{mood}.svg" },
+    { "id": "fedor", "name": "Фёдор Кузьмич", "role": "глава северного посёлка", "skin": "art-skin-1", "hair": "art-hair-1", "layers": ["green-parka", "fur-collar", "full-beard", "ushanka"], "replacement": "assets/characters/fedor-{mood}.svg" },
+    { "id": "ilya", "name": "Илья", "role": "инспектор лесной охраны", "skin": "art-skin-2", "hair": "art-hair-3", "layers": ["ranger-shirt", "neckerchief", "ranger-cap", "binoculars", "sleeve-patches"], "replacement": "assets/characters/ilya-{mood}.svg" }
+  ],
+  "avatars": {
+    "viewBox": "0 0 64 64",
+    "items": [
+      { "id": "a1", "label": "Аватар 1", "background": "art-navy" },
+      { "id": "a2", "label": "Аватар 2", "background": "art-orange" },
+      { "id": "a3", "label": "Аватар 3", "background": "art-red" },
+      { "id": "a4", "label": "Аватар 4", "background": "art-earth", "note": "лётный шлемофон со звездой" }
+    ],
+    "motif": "звёзды-искры на фоне, звезда-нашивка на форме"
+  },
+  "studio": {
+    "component": "StudioRoom",
+    "title": "Зал бюро",
+    "viewBox": "0 0 1200 700",
+    "hotspots": [
+      { "id": "orders", "object": "окно заданий с флажками и макетом кубсата", "anchor": { "x": 386, "y": 250 } },
+      { "id": "orbit", "object": "большой экран «Карта орбит» (точки — аппараты на орбите, prop satellites)", "anchor": { "x": 670, "y": 226 } },
+      { "id": "board", "object": "доска заданий со стикерами", "anchor": { "x": 924, "y": 262 } },
+      { "id": "mail", "object": "станция пневмопочты", "anchor": { "x": 880, "y": 350 } },
+      { "id": "cabinet", "object": "шкаф-архив", "anchor": { "x": 1113, "y": 380 } },
+      { "id": "desk", "object": "рабочее место с монитором телеметрии", "anchor": { "x": 680, "y": 628 } },
+      { "id": "shop", "object": "склад оснащения: тележка с ящиками и ценником", "anchor": { "x": 336, "y": 650 } },
+      { "id": "museum", "object": "витрина музея бюро (шар-спутник, капсула)", "anchor": { "x": 925, "y": 642 } },
+      { "id": "reviews", "object": "журнал миссий на кафедре", "anchor": { "x": 1096, "y": 662 } },
+      { "id": "door", "object": "стальная дверь на территорию (уйти домой)", "anchor": { "x": 135, "y": 340 } }
+    ],
+    "decor": ["сборочный стенд с аппаратом на кронштейне"],
+    "upgrades": [
+      { "id": "plant", "object": "глобус Земли на полу" },
+      { "id": "poster", "object": "плакат «Поехали!»" },
+      { "id": "coffee", "object": "самовар и стаканы в подстаканниках на полке" },
+      { "id": "chair", "object": "кресло-ложемент" },
+      { "id": "monitor2", "object": "второй монитор телеметрии" },
+      { "id": "taskboard", "object": "дополнительный ряд стикеров на доске заданий" },
+      { "id": "lamp", "object": "лампа-луна на шкафу" },
+      { "id": "rug", "object": "ковёр «Звёздная карта»" }
+    ],
+    "layers": ["back (parallax 6px)", "front (parallax -10px)"],
+    "props": {
+      "enabled": "HotspotId[] — остальные хотспоты инертны",
+      "highlight": "HotspotId — прыгающий маркер над хотспотом",
+      "satellites": "number — сколько аппаратов уже на орбите (точки на экране «Карта орбит»)"
+    }
+  },
+  "locations": {
+    "component": "Location",
+    "file": "frontend/src/art/Locations.tsx",
+    "viewBox": "0 0 1600 900",
+    "preserveAspectRatio": "xMidYMid slice",
+    "safeArea": { "x": 350, "y": 0, "width": 900, "height": 900 },
+    "times": ["morning", "day", "evening"],
+    "timesNote": "небо — пастельный градиент --c-sky → --c-sky-2 (утро — персиковый, вечер — сумерки со звёздами, тёплые пятна света ламп через --c-glow); в тёмной теме токены темнеют сами (вечер). Персонажи стоят в нижней трети кадра, она остаётся спокойной (крупные плоские формы без мелких деталей). Доска и монитор — светлые",
+    "items": [
+      { "id": "street", "object": "проходная бюро: ворота, вывеска «Бюро „Космос“», стела с ракетой, КПП, ели, ангар вдали" },
+      { "id": "reception", "object": "бюро пропусков: окно выдачи, турникет, плакат «Семь раз проверь — один раз запусти», дорожка; центр свободен" },
+      { "id": "board", "object": "класс подготовки: белая доска, макет спутника и глобус на столе, плакат с ракетой", "rect": { "name": "BOARD_RECT", "x": 412, "y": 120, "width": 776, "height": 400 } },
+      { "id": "desk", "object": "рабочее место инженера, вид от первого лица; окно на монтажно-испытательный корпус", "rects": {
+        "MONITOR_RECT": { "x": 340, "y": 70, "width": 920, "height": 517 },
+        "NOTES_RECT": { "x": 1334, "y": 84, "width": 224, "height": 372 } } },
+      { "id": "counter", "object": "окно заданий изнутри: вывеска «Приём заданий», флажки, макет кубсата на полке, лампа, звонок (заказчика рисует движок)" },
+      { "id": "studio", "object": "не рисуется в Location (null); хаб использует StudioRoom" },
+      { "id": "launch", "object": "стартовый стол: обобщённая ракета-носитель, фермы обслуживания, степь, закат; экспорт LaunchBackdrop" }
+    ]
+  },
+  "titleArt": { "component": "TitleArt", "file": "frontend/src/art/TitleArt.tsx", "viewBox": "0 0 1600 900", "preserveAspectRatio": "xMidYMid slice", "object": "ретро-плакат: ракета взлетает по диагонали, лучи, дуга Земли, луна, орбита со спутником, силуэт бюро; без текста" },
+  "clientCounter": {
+    "component": "ClientCounter",
+    "viewBox": "0 0 800 420",
+    "props": ["clientId", "mood", "children"],
+    "ariaLabel": "Окно заданий",
+    "parts": ["wall", "sign «Приём заданий»", "window opening", "cubesat model on shelf", "framed rocket", "client (nested svg 240x300, по пояс)", "bunting", "counter", "bell", "desk lamp"]
+  },
+  "orbitMap": {
+    "component": "OrbitMap",
+    "file": "frontend/src/art/OrbitMap.tsx",
+    "viewBox": "0 0 800 600",
+    "props": ["crafts: OrbitCraft[] ({ id, name, orbit: leo|sso|meo|geo, launched })"],
+    "parts": ["Earth (v2)", "4 orbit rings with captions", "craft icons with name pills (non-overlapping layout)", "slow drift animation (art.css, off under prefers-reduced-motion)"]
+  },
+  "launchScene": {
+    "component": "LaunchScene",
+    "file": "frontend/src/art/LaunchScene.tsx",
+    "viewBox": "0 0 1600 900",
+    "props": ["craft", "onDone", "reduced"],
+    "timeline": "3-2-1-«Пуск!», дым, взлёт, затемнение неба, отделение аппарата, подпись; ~6.4 с; при reduced — три статичных кадра ~2.6 с",
+    "animatedProperties": ["transform", "opacity"]
+  },
+  "museum": {
+    "component": "ExhibitArt",
+    "file": "frontend/src/art/Museum.tsx",
+    "viewBox": "0 0 200 200",
+    "items": [
+      { "id": "sputnik", "object": "шар с четырьмя антеннами на подставке" },
+      { "id": "vostok", "object": "спускаемый шар и приборный отсек" },
+      { "id": "lunokhod", "object": "корпус-ванна с крышкой-батареей на восьми колёсах" },
+      { "id": "station", "object": "модульная орбитальная станция с панелями" },
+      { "id": "rocket", "object": "обобщённая ракета-носитель" },
+      { "id": "glonass", "object": "навигационный спутник: корпус в фольге и две панели" },
+      { "id": "cubesat", "object": "кубсат 3U с антенной" },
+      { "id": "engine", "object": "ракетный двигатель: камера, сопло, турбонасос" }
+    ],
+    "note": "без надписей, гербов и логотипов реальных организаций"
+  }
+}

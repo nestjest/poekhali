@@ -1,0 +1,36 @@
+/* Illustration helpers: hover/focus for hotspots, idle animations (motion-safe only). */
+.art-hotspot { cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent; }
+.art-hs-ring { opacity: 0; pointer-events: none; }
+.art-hotspot:focus-visible .art-hs-ring { opacity: 1; }
+.art-hotspot:hover .art-lift,
+.art-hotspot:focus-visible .art-lift { transform: translateY(-4px); }
+.art-hotspot:hover .art-hs-hover { opacity: 1; }
+.art-hs-hover { opacity: 0; pointer-events: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .art-hotspot .art-lift { transition: transform 0.18s ease-out; }
+  .art-breathe {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: art-breathe 4s ease-in-out infinite;
+  }
+  .art-steam { animation: art-steam 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  .art-glow { animation: art-glow 3.2s ease-in-out infinite; }
+  .art-cloud { animation: art-cloud 46s ease-in-out infinite alternate; }
+  .art-sway { transform-box: fill-box; transform-origin: 50% 100%; animation: art-sway 5s ease-in-out infinite; }
+  .art-bounce { animation: art-bounce 0.9s ease-in-out infinite; }
+  .art-tail { transform-box: fill-box; transform-origin: 100% 100%; animation: art-tail 3.6s ease-in-out infinite; }
+  /* rocket exhaust flicker */
+  .art-flame { transform-box: fill-box; transform-origin: 50% 0%; animation: art-flame 0.32s ease-in-out infinite alternate; }
+  /* «Карта орбит»: the group of spacecraft (with labels) drifts slowly around the Earth; a small swing keeps labels inside the frame */
+  .art-orbit-drift { transform-box: view-box; transform-origin: 400px 300px; animation: art-orbit-drift 36s ease-in-out infinite alternate; }
+  @keyframes art-flame { 0% { transform: scale(1, 0.9); } 100% { transform: scale(1.06, 1.08); } }
+  @keyframes art-orbit-drift { 0% { transform: rotate(-4deg); } 100% { transform: rotate(4deg); } }
+  @keyframes art-cloud { 0% { transform: translateX(-34px); } 100% { transform: translateX(34px); } }
+  @keyframes art-sway { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+  @keyframes art-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  @keyframes art-tail { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(7deg); } }
+  @keyframes art-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.012); } }
+  @keyframes art-steam { 0%, 100% { opacity: 0.35; transform: translateY(0); } 50% { opacity: 0.8; transform: translateY(-5px); } }
+  @keyframes art-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 0.8; } }
+}

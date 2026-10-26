@@ -1,0 +1,309 @@
+{
+  "id": "d2-closing",
+  "lesson": 2,
+  "review_needed": true,
+  "diagnostic": false,
+  "nodes": [
+    {
+      "type": "scene",
+      "location": "studio",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [
+        {
+          "who": "olga",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "vika",
+          "pos": "right",
+          "mood": "joy"
+        }
+      ],
+      "title": "Среда, 17:30",
+      "id": "n1"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "joy",
+      "text": "Смена закрыта! Утром программа шла сверху вниз, к вечеру сама выбирает путь.",
+      "id": "n2"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Сравнения, `if`, `elif`, `and`, `or`, проверка ввода — всё в Тетради инженера.",
+      "id": "n3"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "neutral",
+      "text": "А ошибки оказались подсказками: перепутали `=` и `==`, зато теперь не перепутаете.",
+      "id": "n4"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Перед стартом последний шаг: решение о сеансе собирает экипаж. Связисту важно знать точный текст решения.",
+      "id": "crew_intro"
+    },
+    {
+      "type": "crew",
+      "mission": "crew2",
+      "id": "crew_task"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Решение на борту. Посёлок будет на связи.",
+      "id": "crew_done"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Пора на старт. «Северок» собран из ваших программ, Андрей Ильич и Фёдор Кузьмич уже там.",
+      "id": "n5"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Идём!",
+          "next": "n7"
+        },
+        {
+          "text": "Только телефон захвачу.",
+          "next": "n7"
+        }
+      ],
+      "id": "n6"
+    },
+    {
+      "type": "scene",
+      "location": "launch",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [
+        {
+          "who": "gromov",
+          "pos": "center",
+          "mood": "neutral"
+        },
+        {
+          "who": "fedor",
+          "pos": "left",
+          "mood": "joy"
+        },
+        {
+          "who": "sokolov",
+          "pos": "right",
+          "mood": "neutral"
+        }
+      ],
+      "title": "Стартовый стол, 18:00",
+      "id": "n7"
+    },
+    {
+      "type": "narrate",
+      "text": "Ракета уже на столе. Над степью догорает закат, ветер доносит запах полыни.",
+      "id": "n8"
+    },
+    {
+      "type": "say",
+      "who": "sokolov",
+      "mood": "neutral",
+      "text": "Докладываю: «Северок» принят, все испытания пройдены. Посёлок ждёт.",
+      "id": "n9"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "neutral",
+      "text": "В 1965 году Алексей Леонов первым вышел в открытый космос — около двенадцати минут. Мало времени значит: всё проверено заранее.",
+      "id": "n10"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Мы всё проверили.",
+          "next": "n12"
+        },
+        {
+          "text": "Я готов.",
+          "next": "n13"
+        }
+      ],
+      "id": "n11"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "joy",
+      "text": "Семь раз проверь — один раз запусти. Верно.",
+      "id": "n12",
+      "next": "n14"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "neutral",
+      "text": "Вижу. Тогда по традиции.",
+      "id": "n13",
+      "next": "n14"
+    },
+    {
+      "type": "say",
+      "who": "gromov",
+      "mood": "joy",
+      "text": "В этот миг говорят: «Поехали!»",
+      "id": "n14"
+    },
+    {
+      "type": "launch",
+      "craft": "Северок",
+      "text": "«Северок» выходит на орбиту",
+      "id": "n15"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "joy",
+      "text": "Ну вот. Теперь у нас на Севере и связь есть, и повод для чая.",
+      "id": "n16"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "Порядок elif",
+          "next": "n18"
+        },
+        {
+          "text": "Знаки `=` и `==`",
+          "next": "n19"
+        },
+        {
+          "text": "`and` и `or`",
+          "next": "n20"
+        },
+        {
+          "text": "Всё было понятно",
+          "next": "n21"
+        }
+      ],
+      "prompt": "Что было самым сложным?",
+      "id": "n17"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "neutral",
+      "text": "Правило простое: самое строгое условие — первым.",
+      "id": "n18",
+      "next": "n22"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "neutral",
+      "text": "Один знак кладёт, два спрашивают. Запиши в тетрадь.",
+      "id": "n19",
+      "next": "n22"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "neutral",
+      "text": "Вспоминай слова «и» и «или». Они помогут не запутаться.",
+      "id": "n20",
+      "next": "n22"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "Отлично! Тогда завтра можно браться за циклы.",
+      "id": "n21",
+      "next": "n22"
+    },
+    {
+      "type": "choice",
+      "options": [
+        {
+          "text": "До завтра!",
+          "next": "n23"
+        },
+        {
+          "text": "Спасибо вам всем.",
+          "next": "n24"
+        },
+        {
+          "text": "Можно я ещё посижу?",
+          "next": "n25"
+        }
+      ],
+      "prompt": "Пора прощаться",
+      "id": "n22"
+    },
+    {
+      "type": "say",
+      "who": "vika",
+      "mood": "joy",
+      "text": "До завтра! Приходи с хорошим настроением.",
+      "id": "n23",
+      "next": "n26"
+    },
+    {
+      "type": "say",
+      "who": "olga",
+      "mood": "joy",
+      "text": "Тебе спасибо. Хорошая смена.",
+      "id": "n24",
+      "next": "n26"
+    },
+    {
+      "type": "say",
+      "who": "fedor",
+      "mood": "joy",
+      "text": "Посиди, милый. Но чай стынет.",
+      "id": "n25",
+      "next": "n26"
+    },
+    {
+      "type": "scene",
+      "location": "street",
+      "time": "evening",
+      "transition": "fade",
+      "cast": [],
+      "title": "Среда, 18:50",
+      "id": "n26"
+    },
+    {
+      "type": "narrate",
+      "text": "Иду к проходной. Над северным посёлком сейчас пролетает «Северок», а в голове крутится: если, иначе, и, или.",
+      "id": "n27"
+    },
+    {
+      "id": "quote_of_day",
+      "type": "quote",
+      "quote": "tereshkova_sky"
+    },
+    {
+      "type": "flag",
+      "set": "day3_closing_done",
+      "id": "n28"
+    },
+    {
+      "type": "end",
+      "id": "n29"
+    }
+  ]
+}
