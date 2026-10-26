@@ -384,6 +384,15 @@ def create_app(db_path: Path | str = ":memory:", content: Path | None = None,
     fails: dict[str, list[float]] = defaultdict(list)
     checking: set[int] = set()          # students whose check is running: one check at a time per student
     app.state.store = store
+
+    @app.middleware("http")
+    async def no_store(request: Request, call_next: Any) -> Any:
+        # Lesson state changes every second: the browser and a CDN (Vercel) must not cache answers of the API.
+        response = await call_next(request)
+        if request.url.path.startswith("/api/"):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     app.state.hub = hub
     app.state.catalog = catalog
     app.state.missions = missions

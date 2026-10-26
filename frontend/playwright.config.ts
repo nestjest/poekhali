@@ -6,7 +6,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const PORT = 8010;
-const db = join(tmpdir(), `bureau-e2e-${Date.now()}.db`);
+// E2E_DATABASE_URL=postgresql://… runs the same tests on PostgreSQL (the Vercel setup).
+const db = process.env.E2E_DATABASE_URL ?? join(tmpdir(), `bureau-e2e-${Date.now()}.db`);
 
 export default defineConfig({
   testDir: 'e2e',

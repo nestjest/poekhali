@@ -1,0 +1,7 @@
+node_modules
+frontend/dist
+frontend/public/pyodide
+frontend/test-results
+server/data
+**/__pycache__
+**/.pytest_cache

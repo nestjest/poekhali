@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 from bureau_server import crews as crewlib
 from bureau_server.crews import Crew
 
+from conftest import fresh_db
 from test_server import PASSWORD, client, content, new_session, teacher_headers  # noqa: F401  (fixtures)
 
 REPO = Path(__file__).resolve().parents[2]
@@ -28,7 +29,7 @@ def cc(tmp_path: Path, crew_content: Path, monkeypatch: pytest.MonkeyPatch) -> T
     from bureau_server.app import create_app
     monkeypatch.delenv("BUREAU_CHECKER_URL", raising=False)
     monkeypatch.setenv("BUREAU_LOCAL_CHECK", "1")
-    app = create_app(tmp_path / "c.db", content=crew_content, static_dir=tmp_path / "no-dist")
+    app = create_app(fresh_db(tmp_path / "c.db"), content=crew_content, static_dir=tmp_path / "no-dist")
     app.state.store.set_password(PASSWORD)
     return TestClient(app)
 
@@ -164,7 +165,7 @@ def test_race_counts_quiz_points() -> None:
 def test_crew_museum_quiz_once_per_question(cc: TestClient, crew_content: Path) -> None:
     shutil.copy(REPO / "content" / "museum.json", crew_content / "museum.json")
     from bureau_server.app import create_app
-    app = create_app(crew_content.parent / "q.db", content=crew_content, static_dir=crew_content / "no-dist")
+    app = create_app(fresh_db(crew_content.parent / "q.db"), content=crew_content, static_dir=crew_content / "no-dist")
     app.state.store.set_password(PASSWORD)
     c = TestClient(app)
     h = teacher_headers(c)

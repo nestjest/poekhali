@@ -100,3 +100,22 @@ test('титул: режим «Знакомство»', async ({ page }) => {
   const saved = await page.evaluate(() => Object.values({ ...localStorage }).some((v) => String(v).includes('"track":"intro"')));
   expect(saved).toBe(true);
 });
+
+test('без WebSocket (как на Vercel): этап и «Внимание!» приходят опросом сервера', async ({ page, request }) => {
+  await page.routeWebSocket(/\/ws/, (ws) => ws.close());
+  const t = await teacher(request);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Войти в урок' }).click();
+  const form = page.getByRole('form', { name: 'Вход в урок' });
+  await form.getByRole('textbox').first().fill(t.code);
+  await form.getByRole('textbox').nth(1).fill('Ёж');
+  await form.getByRole('button', { name: 'Войти в урок' }).click();
+  const waiting = page.getByText('ЖДЁМ КОМАНДУ ЦУП', { exact: true });
+  await expect(waiting).toBeVisible();
+  await t.act('stage', { stage: 'intro', open: true });
+  await expect(waiting).toBeHidden({ timeout: 8_000 });   // polling every 3 s
+  await expect(page.locator('.dlg-wrap')).toBeVisible();
+  await t.act('attention', { on: true, text: 'Смотрим на доску' });
+  await expect(page.getByRole('alertdialog', { name: 'Внимание!' })).toBeVisible({ timeout: 8_000 });
+  await t.act('end');
+});

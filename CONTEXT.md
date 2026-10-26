@@ -127,3 +127,9 @@
 - Линтер: вопросы экспонатов, открытость экспоната к моменту вопроса, цитаты (ФИО, факт), навыки карточек тетради.
 - Проверено: линтер 0 ошибок; pytest 103; Vitest 60; e2e 8; `ui-audit.mjs` 144 экрана (+ музей, тетрадь, вопрос заказчика, опрос экипажа, цитата) без замечаний; статическая сборка по подпути `/poekhali/` с Pyodide.
 - Публикация: GitHub `nestjest/poekhali`, GitHub Pages через Actions (`.github/workflows/pages.yml`), `vite base` из `BUREAU_BASE`.
+
+## Этап 10 — сервер урока на Vercel ✅ (2026-10-26)
+- `store.py`: SQLite или PostgreSQL по `DATABASE_URL` (один SQL, psycopg 3 только для URL, переподключение для serverless), `ensure_password`.
+- `api/index.py` + `vercel.json` + `requirements.txt` (корень) + `.vercelignore`: статика игры и FastAPI-функция `/api/*`.
+- Клиент и пульт: без WebSocket — опрос каждые 3 с (`POLL_FAST_MS`, `WS_GIVE_UP`), `no-store` на API.
+- Проверено: pytest сервера 46 — на SQLite и на PostgreSQL 16 (Docker); e2e 9 на PostgreSQL, в т. ч. новый «без WebSocket»; точка входа Vercel — холодный старт, вход преподавателя, повторный старт без выхода.

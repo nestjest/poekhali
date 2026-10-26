@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Avatar, type AvatarId } from '../art/Avatar';
 import { LESSONS } from '../content';
 import { commonErrors, STATUS_LABEL, studentStatus, type ClassStudent, type PublicPoll, type StudentStatus } from '../lib/gate';
-import { api, ApiError, wsUrl, type ClassView, type SessionSummary, type TeacherLesson } from '../lesson/api';
+import { api, ApiError, POLL_FAST_MS, WS_GIVE_UP, wsUrl, type ClassView, type SessionSummary, type TeacherLesson } from '../lesson/api';
 import { CodeViewer } from './CodeViewer';
 import { CrewsCard } from './CrewsCard';
 import { errorTagRu } from './errorTags';
@@ -147,16 +147,29 @@ export function useClass(token: string, id: number, onAuthLost: () => void) {
     let ws: WebSocket | null = null;
     let stopped = false;
     let timer: number | undefined;
+    let fails = 0;
+    let everOpen = false;
+    let last = Date.now();
     const open = () => {
       ws = new WebSocket(wsUrl(`role=teacher&token=${encodeURIComponent(token)}&session=${id}`));
-      ws.onopen = () => setLive(true);
+      ws.onopen = () => { everOpen = true; fails = 0; setLive(true); };
       ws.onmessage = (ev) => {
         try { const m = JSON.parse(String(ev.data)) as { type: string } & ClassView; if (m.type === 'class') setView(m); } catch { /* ignore */ }
       };
-      ws.onclose = () => { setLive(false); if (!stopped) timer = window.setTimeout(open, 3000); };
+      ws.onclose = () => {
+        setLive(false);
+        fails += 1;
+        // Serverless hosting (Vercel) has no WebSockets: after a few failures the console lives on polling.
+        if (!stopped && (everOpen || fails < WS_GIVE_UP)) timer = window.setTimeout(open, 3000);
+      };
     };
     open();
-    const poll = window.setInterval(load, 15_000);
+    // Polling: every 15 s next to a live socket, every 3 s without it (the class panel stays current).
+    const poll = window.setInterval(() => {
+      if (ws?.readyState === WebSocket.OPEN && Date.now() - last < 15_000) return;
+      last = Date.now();
+      void load();
+    }, POLL_FAST_MS);
     return () => { stopped = true; window.clearInterval(poll); window.clearTimeout(timer); ws?.close(); };
   }, [token, id, load]);
   return { view, setView, error, setError, live };

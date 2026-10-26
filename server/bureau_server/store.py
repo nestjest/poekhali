@@ -1,5 +1,7 @@
-"""SQLite storage for lesson sessions (stdlib only).
+"""Storage for lesson sessions: SQLite (stdlib, the default: a classroom computer) or PostgreSQL.
 
+PostgreSQL is used when the database is given as a URL (`postgres://…`, env DATABASE_URL): serverless hosting
+(Vercel) has no persistent disk. The SQL is the same for both; the driver (psycopg 3) is imported only then.
 One teacher password per server. Students are pseudonyms inside a session (no full names, 152-ФЗ).
 """
 from __future__ import annotations
@@ -40,6 +42,16 @@ CREATE TABLE IF NOT EXISTS code (
   student_id INTEGER NOT NULL, order_file TEXT NOT NULL, source TEXT NOT NULL, at REAL NOT NULL,
   result TEXT, PRIMARY KEY (student_id, order_file));
 """
+
+
+def is_url(db: Path | str) -> bool:
+    return str(db).startswith(("postgres://", "postgresql://"))
+
+
+def pg_schema(schema: str) -> list[str]:
+    """The SQLite schema in PostgreSQL types: autoincrement ids and floating timestamps."""
+    sql = schema.replace("INTEGER PRIMARY KEY,", "BIGSERIAL PRIMARY KEY,").replace(" REAL", " DOUBLE PRECISION")
+    return [x.strip() for x in sql.split(";") if x.strip()]
 
 
 def hash_password(password: str, salt: bytes | None = None) -> str:
@@ -117,26 +129,56 @@ class Store:
     def __init__(self, path: Path | str):
         self.path = str(path)
         self.lock = threading.Lock()
-        self.db = sqlite3.connect(self.path, check_same_thread=False)
-        self.db.row_factory = sqlite3.Row
+        self.pg = is_url(self.path)
+        self.db: Any = None
+        self._connect()
+        if self.pg:
+            with self.lock:
+                for stmt in pg_schema(SCHEMA):
+                    self.db.execute(stmt)
+                self.db.execute("ALTER TABLE crews ADD COLUMN IF NOT EXISTS quiz TEXT NOT NULL DEFAULT '{}'")
+            return
         self.db.executescript(SCHEMA)
         # Databases made before the museum quiz: add the column in place (SQLite has no ADD COLUMN IF NOT EXISTS).
         if "quiz" not in {r["name"] for r in self.db.execute("PRAGMA table_info(crews)")}:
             self.db.execute("ALTER TABLE crews ADD COLUMN quiz TEXT NOT NULL DEFAULT '{}'")
         self.db.commit()
 
-    # ------------------------------------------------------------ helpers
-    def _q(self, sql: str, args: tuple[Any, ...] = ()) -> list[sqlite3.Row]:
-        with self.lock:
-            rows = self.db.execute(sql, args).fetchall()
-            self.db.commit()
-            return rows
+    def _connect(self) -> None:
+        if self.pg:
+            import psycopg  # only for PostgreSQL hosting (requirements-vercel.txt)
+            from psycopg.rows import dict_row
+            self.db = psycopg.connect(self.path, autocommit=True, row_factory=dict_row, prepare_threshold=None)
+        else:
+            self.db = sqlite3.connect(self.path, check_same_thread=False)
+            self.db.row_factory = sqlite3.Row
 
-    def _ins(self, sql: str, args: tuple[Any, ...]) -> int:
-        with self.lock:
+    # ------------------------------------------------------------ helpers
+    def _exec(self, sql: str, args: tuple[Any, ...]) -> Any:
+        if not self.pg:
             cur = self.db.execute(sql, args)
             self.db.commit()
-            return int(cur.lastrowid or 0)
+            return cur
+        sql = sql.replace("?", "%s")
+        try:
+            return self.db.execute(sql, args)
+        except Exception as exc:  # noqa: BLE001 — a serverless instance may wake up with a dropped connection
+            if not getattr(self.db, "closed", False) and type(exc).__name__ not in ("OperationalError", "InterfaceError"):
+                raise
+            self._connect()
+            return self.db.execute(sql, args)
+
+    def _q(self, sql: str, args: tuple[Any, ...] = ()) -> list[Any]:
+        with self.lock:
+            cur = self._exec(sql, args)
+            return cur.fetchall() if cur.description else []
+
+    def _ins(self, sql: str, args: tuple[Any, ...]) -> int:
+        """INSERT into a table with an autoincrement id; returns the id."""
+        with self.lock:
+            if self.pg:
+                return int(self._exec(sql + " RETURNING id", args).fetchone()["id"])
+            return int(self._exec(sql, args).lastrowid or 0)
 
     def audit(self, session_id: int | None, actor: str, action: str, data: dict[str, Any]) -> None:
         self._ins("INSERT INTO audit (at, session_id, actor, action, data) VALUES (?, ?, ?, ?, ?)",
@@ -152,9 +194,14 @@ class Store:
         return bool(self._q("SELECT 1 FROM settings WHERE key = 'teacher_password'"))
 
     def set_password(self, password: str) -> None:
-        self._q("INSERT OR REPLACE INTO settings (key, value) VALUES ('teacher_password', ?)",
-                (hash_password(password),))
+        self._q("INSERT INTO settings (key, value) VALUES ('teacher_password', ?) "
+                "ON CONFLICT (key) DO UPDATE SET value = excluded.value", (hash_password(password),))
         self._q("DELETE FROM teacher_tokens")
+
+    def ensure_password(self, password: str) -> None:
+        """Set the password from the environment only if it changed: a restart must not log the teacher out."""
+        if not self.check_password(password):
+            self.set_password(password)
 
     def check_password(self, password: str) -> bool:
         rows = self._q("SELECT value FROM settings WHERE key = 'teacher_password'")
@@ -163,7 +210,7 @@ class Store:
     def new_teacher_token(self) -> str:
         token = secrets.token_urlsafe(24)
         self._q("DELETE FROM teacher_tokens WHERE expires < ?", (time.time(),))
-        self._ins("INSERT INTO teacher_tokens (token, expires) VALUES (?, ?)", (token, time.time() + TEACHER_TOKEN_TTL))
+        self._q("INSERT INTO teacher_tokens (token, expires) VALUES (?, ?)", (token, time.time() + TEACHER_TOKEN_TTL))
         return token
 
     def teacher_ok(self, token: str | None) -> bool:
@@ -172,7 +219,7 @@ class Store:
         return bool(self._q("SELECT 1 FROM teacher_tokens WHERE token = ? AND expires > ?", (token, time.time())))
 
     # ------------------------------------------------------------ sessions
-    def _session(self, row: sqlite3.Row) -> Session:
+    def _session(self, row: Any) -> Session:
         st = json.loads(row["state"])
         return Session(id=row["id"], code=row["code"], lesson=row["lesson"], mode=row["mode"], group=row["grp"],
                        open_stages=st.get("open_stages", []), closed_orders=st.get("closed_orders", []),
@@ -208,7 +255,7 @@ class Store:
                 (s.mode, s.group, json.dumps(state, ensure_ascii=False), s.ended, s.id))
 
     # ------------------------------------------------------------ students
-    def _student(self, row: sqlite3.Row) -> Student:
+    def _student(self, row: Any) -> Student:
         return Student(id=row["id"], session_id=row["session_id"], nick=row["nick"], avatar=row["avatar"],
                        token=row["token"], joined=row["joined"], last_seen=row["last_seen"],
                        progress=json.loads(row["progress"]), help=row["help"], grants=json.loads(row["grants"]))
@@ -250,7 +297,9 @@ class Store:
 
     # ------------------------------------------------------------ code snapshots (read-only for the teacher)
     def save_code(self, student_id: int, order_file: str, source: str, result: dict[str, Any] | None = None) -> None:
-        self._q("INSERT OR REPLACE INTO code (student_id, order_file, source, at, result) VALUES (?, ?, ?, ?, ?)",
+        self._q("INSERT INTO code (student_id, order_file, source, at, result) VALUES (?, ?, ?, ?, ?) "
+                "ON CONFLICT (student_id, order_file) DO UPDATE SET source = excluded.source, at = excluded.at, "
+                "result = excluded.result",
                 (student_id, order_file, source, time.time(),
                  json.dumps(result, ensure_ascii=False) if result is not None else None))
 
@@ -262,7 +311,7 @@ class Store:
 
     # ------------------------------------------------------------ crews (team «Конец смены»)
     @staticmethod
-    def _crew(row: sqlite3.Row) -> Crew:
+    def _crew(row: Any) -> Crew:
         return Crew(id=row["id"], session_id=row["session_id"], name=row["name"], members=json.loads(row["members"]),
                     parts=json.loads(row["parts"]), result=json.loads(row["result"]) if row["result"] else None,
                     launched=row["launched"], chat=json.loads(row["chat"]), accepted=bool(row["accepted"]),

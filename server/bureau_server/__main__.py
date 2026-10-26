@@ -15,7 +15,7 @@ import uvicorn
 
 from .app import ROOT, create_app
 from .codes import WORDS
-from .store import Store
+from .store import Store, is_url
 
 _LATIN = {"КЕДР": "kedr", "ЧАЙКА": "chaika", "ВОСТОК": "vostok", "СОЮЗ": "soyuz", "ЗАРЯ": "zarya",
           "ЛУНА": "luna", "ВЕГА": "vega", "ИСКРА": "iskra", "МИР": "mir", "ОРБИТА": "orbita",
@@ -84,12 +84,14 @@ def main() -> None:
     p = argparse.ArgumentParser(description="Сервер урока курса «Поехали!»")
     p.add_argument("--host", default="0.0.0.0", help="адрес (0.0.0.0 — доступно всем в локальной сети)")
     p.add_argument("--port", type=int, default=8000)
-    p.add_argument("--db", default=str(ROOT / "server" / "data" / "bureau.db"), help="файл базы SQLite")
+    p.add_argument("--db", default=os.environ.get("DATABASE_URL") or str(ROOT / "server" / "data" / "bureau.db"),
+                   help="файл базы SQLite или адрес PostgreSQL (postgresql://…, переменная DATABASE_URL)")
     p.add_argument("--set-password", action="store_true", help="задать пароль преподавателя и выйти")
     p.add_argument("--reset-password", action="store_true", help="сгенерировать новый пароль и показать его")
     args = p.parse_args()
 
-    Path(args.db).parent.mkdir(parents=True, exist_ok=True)
+    if not is_url(args.db):
+        Path(args.db).parent.mkdir(parents=True, exist_ok=True)
     store = Store(args.db)
     if args.set_password:
         pw = getpass.getpass("Новый пароль преподавателя (от 6 символов): ")
@@ -101,7 +103,7 @@ def main() -> None:
     generated = None
     env_pw = os.environ.get("BUREAU_TEACHER_PASSWORD")
     if env_pw:
-        store.set_password(env_pw)
+        store.ensure_password(env_pw)
     elif args.reset_password or not store.has_password():
         generated = readable_password()
         store.set_password(generated)

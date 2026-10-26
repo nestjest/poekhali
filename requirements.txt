@@ -1,0 +1,3 @@
+# Vercel serverless function (api/index.py). The classroom server: server/requirements.txt.
+fastapi>=0.115
+psycopg[binary]>=3.2

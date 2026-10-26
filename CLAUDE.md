@@ -19,7 +19,7 @@
 - Результаты судьи сериализуются `judge.to_json`; CPython и Pyodide должны давать побайтово одинаковый JSON (`npm run test:identity`).
 - Скрытые кейсы не раскрывают ввод и ожидаемый вывод — только замечание заказчика (`complaint`).
 - Код студента выполняется в Web Worker (Pyodide). Сервер урока код НЕ выполняет: серверная проверка — только отдельный изолированный сервис `checker` (Docker, `BUREAU_CHECKER_URL`; `BUREAU_LOCAL_CHECK=1` — лишь для разработки и тестов). Pyodide, шрифты, графика — только локально, без CDN.
-- Сервер урока: FastAPI + WebSocket + SQLite (stdlib), без внешних сервисов; права проверяются на каждом эндпоинте и в WebSocket; ФИО не собираем (только псевдоним).
+- Сервер урока: FastAPI + WebSocket + SQLite (stdlib), без внешних сервисов; права проверяются на каждом эндпоинте и в WebSocket; ФИО не собираем (только псевдоним). Облачный вариант — Vercel (`api/index.py`, `vercel.json`): PostgreSQL из `DATABASE_URL` (тот же SQL, `store.py`), без WebSocket — игра и пульт живут на опросе каждые 3 с; любая новая функция урока должна работать и через опрос `/api/state`.
 - Ввод, который набирает человек (код урока, псевдоним), считать «грязным»: нормализовать регистр, пробелы, дефисы, латиницу/кириллицу, ё/е (`server/bureau_server/codes.py`).
 - Контент — данные (`content/*.json`), не код. Любое изменение контента должно проходить `python tools/lint_content.py` с 0 ошибок.
 - Графика — собственные слоистые SVG (`frontend/src/art`, манифест `assets/manifest.json`) или CC0; источники — в `assets/LICENSES.md`. Никаких материалов чужих игр и логотипов реальных организаций.
@@ -55,7 +55,7 @@
 - Перед «готово» — проверка в браузере: светлая/тёмная тема, 360 px и десктоп, нет горизонтального скролла и пересечений (`getBoundingClientRect`); для урока — сценарий «пульт открывает этап → ученик продолжает».
 
 ## Тесты
-- `python -m pytest -q packages/judge/tests tools/tests server/tests` — судья, линтер, реальный контент, сервер урока.
+- `python -m pytest -q packages/judge/tests tools/tests server/tests` — судья, линтер, реальный контент, сервер урока; `BUREAU_TEST_DATABASE_URL=postgresql://…` — те же тесты сервера на PostgreSQL (`E2E_DATABASE_URL` — для Playwright).
 - `python tools/lint_content.py` — линтер контента.
 - `cd frontend && node scripts/ui-audit.mjs http://localhost:8010 <пароль> <папка>` — аудит вёрстки всех экранов (темы, 360/десктоп, A+) со скриншотами; запускать перед «готово» после правок интерфейса.
 - `cd frontend && npm test` — Vitest; `npm run build` — типы и сборка; `npm run test:identity` — CPython vs Pyodide; `npm run test:e2e` — Playwright (после сборки, установленный Chrome).

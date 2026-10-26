@@ -7,6 +7,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from bureau_server.app import create_app
+from conftest import fresh_db
 from bureau_server.codes import make_code, normalize_code
 from bureau_server.store import hash_password, verify_password
 
@@ -37,7 +38,7 @@ def content(tmp_path: Path) -> Path:
 def client(tmp_path: Path, content: Path, monkeypatch: pytest.MonkeyPatch) -> TestClient:
     monkeypatch.delenv("BUREAU_CHECKER_URL", raising=False)
     monkeypatch.setenv("BUREAU_LOCAL_CHECK", "1")       # isolated local checker for the tests
-    app = create_app(tmp_path / "t.db", content=content, static_dir=tmp_path / "no-dist")
+    app = create_app(fresh_db(tmp_path / "t.db"), content=content, static_dir=tmp_path / "no-dist")
     app.state.store.set_password(PASSWORD)
     return TestClient(app)
 

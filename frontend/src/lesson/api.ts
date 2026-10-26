@@ -14,6 +14,7 @@ export async function api<T>(path: string, opts: { method?: string; body?: unkno
   let res: Response;
   try {
     res = await fetch(path, {
+      cache: 'no-store',   // live lesson state: never from the HTTP cache
       method: opts.method ?? (opts.body === undefined ? 'GET' : 'POST'),
       headers: {
         ...(opts.body === undefined ? {} : { 'Content-Type': 'application/json' }),
@@ -120,13 +121,20 @@ export async function answerPoll(poll: number, option: number): Promise<void> {
 }
 
 /**
- * Keep the lesson state live: WebSocket with reconnect, plus polling /api/state every 20 s
- * as a fallback (school networks sometimes block WebSockets). Returns a cleanup function.
+ * Keep the lesson state live: WebSocket with reconnect, plus polling /api/state as a fallback — every 20 s while
+ * the socket is open, every 3 s without it (school networks block WebSockets; serverless hosting such as Vercel has
+ * none: after a few failed attempts the socket is not retried). Returns a cleanup function.
  */
+export const POLL_FAST_MS = 3_000;
+export const POLL_SLOW_MS = 20_000;
+export const WS_GIVE_UP = 3;
 export function connectLesson(onLost: (reason: string) => void): () => void {
   let ws: WebSocket | null = null;
   let stopped = false;
   let retry = 0;
+  let everOpen = false;
+  let lastPollOk = 0;
+  let lastPoll = 0;
   let reconnectTimer: number | undefined;
   const lesson = useLesson.getState;
 
@@ -136,8 +144,10 @@ export function connectLesson(onLost: (reason: string) => void): () => void {
   const poll = async () => {
     const token = lesson().token;
     if (!token || stopped) return;
+    lastPoll = Date.now();
     try {
       lesson().setView(await api<StudentView>('/api/state', { token }));
+      lastPollOk = Date.now();
       if (!ws || ws.readyState !== WebSocket.OPEN) lesson().setLink('online'); // reachable by polling
     } catch (e) {
       if (e instanceof ApiError) { lost(e.status); if (e.status === 0) lesson().setLink('offline'); }
@@ -148,7 +158,7 @@ export function connectLesson(onLost: (reason: string) => void): () => void {
     if (!token || stopped) return;
     lesson().setLink('connecting');
     try { ws = new WebSocket(wsUrl(`token=${encodeURIComponent(token)}`)); } catch { ws = null; return; }
-    ws.onopen = () => { retry = 0; lesson().setLink('online'); };
+    ws.onopen = () => { retry = 0; everOpen = true; lesson().setLink('online'); };
     ws.onmessage = (ev) => {
       try {
         const msg = JSON.parse(String(ev.data)) as { type: string } & Partial<StudentView>;
@@ -159,15 +169,19 @@ export function connectLesson(onLost: (reason: string) => void): () => void {
       ws = null;
       if (stopped) return;
       if (ev.code === 4401) { void poll(); return; }
-      lesson().setLink('offline');
+      if (Date.now() - lastPollOk > 2 * POLL_FAST_MS) lesson().setLink('offline');
       retry = Math.min(retry + 1, 6);
+      if (!everOpen && retry >= WS_GIVE_UP) return;   // no WebSockets here: polling only
       reconnectTimer = window.setTimeout(open, 1000 * 2 ** Math.min(retry, 4));
     };
   };
 
   void poll();
   open();
-  const pollTimer = window.setInterval(poll, 20_000);
+  const pollTimer = window.setInterval(() => {
+    const live = ws?.readyState === WebSocket.OPEN;
+    if (!live || Date.now() - lastPoll >= POLL_SLOW_MS) void poll();
+  }, POLL_FAST_MS);
   const pingTimer = window.setInterval(() => { if (ws?.readyState === WebSocket.OPEN) ws.send('{"type":"ping"}'); }, 25_000);
   return () => {
     stopped = true;
