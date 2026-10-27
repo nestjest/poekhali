@@ -34,7 +34,7 @@ PY=/usr/bin/python3
 
 echo "== 4/4 site $SITE"
 mkdir -p "$DATA" && chmod 700 "$DATA"
-[ -f "$DATA/env" ] || printf 'BUREAU_PUBLIC_URL=https://%s\n' "$(basename "$SITE")" > "$DATA/env"
+[ -f "$DATA/env" ] || printf 'BUREAU_PUBLIC_URL=http://%s\n' "$(basename "$SITE")" > "$DATA/env"
 chmod 600 "$DATA/env"
 PUB="$SITE/public_html"
 mkdir -p "$PUB"
@@ -47,7 +47,7 @@ PassengerEnabled On
 PassengerPython $PY
 EOF
 sed -e "s#@REPO@#$REPO#g" -e "s#@DATA@#$DATA#g" "$REPO/deploy/beget/passenger_wsgi.py" > "$SITE/passenger_wsgi.py"
-mkdir -p "$SITE/tmp" && touch "$SITE/tmp/restart.txt"
+ln -sfn public_html "$SITE/public"          # Passenger's static folder
 
 # The teacher password lives in the database; a new SQLite database gets a generated one (shown once).
 cd "$SITE"
@@ -61,5 +61,13 @@ if not store.has_password():
     store.set_password(pw)
     print(f"\n  Пароль преподавателя: {pw}\n  (запишите; сменить: cd ~/poekhali/server && PYTHONPATH=../.pydeps python3 -m bureau_server --db ~/poekhali-data/bureau.db --set-password)")
 EOF
+
+# The site runs as its own user (see getfacl of the site folder): it reads the code and writes the data folder.
+SITE_USER="$(getfacl -p "$SITE" 2>/dev/null | sed -n 's/^user:\([^:]\{1,\}\):.*/\1/p' | grep -vx "$(whoami)" | head -1)"
+if [ -n "$SITE_USER" ]; then
+  setfacl -R -m "u:$SITE_USER:rX" -m "d:u:$SITE_USER:rX" "$REPO"
+  setfacl -R -m "u:$SITE_USER:rwX" -m "d:u:$SITE_USER:rwX" "$DATA"
+fi
+mkdir -p "$SITE/tmp" && touch "$SITE/tmp/restart.txt"
 echo
-echo "  Готово. Ученикам: https://$(basename "$SITE")/   Преподавателю: https://$(basename "$SITE")/#/teacher"
+echo "  Готово (сайт пользователя ${SITE_USER:-?}). Ученикам: http://$(basename "$SITE")/   Преподавателю: http://$(basename "$SITE")/#/teacher"
