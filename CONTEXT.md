@@ -134,3 +134,8 @@
 - Клиент и пульт: без WebSocket — опрос каждые 3 с (`POLL_FAST_MS`, `WS_GIVE_UP`), `no-store` на API.
 - Проверено: pytest сервера 46 — на SQLite и на PostgreSQL 16 (Docker); e2e 9 на PostgreSQL, в т. ч. новый «без WebSocket»; точка входа Vercel — холодный старт, вход преподавателя, повторный старт без выхода.
 - Развёрнуто: https://poekhali.vercel.app (проект Vercel `poekhali`, база Neon `poekhali-db`, пароль преподавателя — переменная `BUREAU_TEACHER_PASSWORD`, Git подключён: push в `main` → деплой). e2e 9/9 на живом адресе (`E2E_BASE_URL`, `E2E_PASSWORD`).
+
+## Этап 11 — переезд на Beget ✅ (2026-10-27)
+- «Цитата дня» первого дня — `gagarin_glory` («Это не моя личная слава…»), `gagarin_go` оставлена для музея; первоисточник сверить (`docs/content-review.md`).
+- `deploy/beget`: `install.sh` + `passenger_wsgi.py` — виртуальный хостинг Beget (Passenger, WSGI через `a2wsgi`, без WebSocket — опрос). Репозиторий и данные — в папке сайта (сайт работает от своего пользователя, `setfacl` запрещён, доступ даёт только ACL папки сайта); Python 3.10 системный, пакеты — `pip --target .pydeps` (нет venv/ensurepip); Node.js 22 в `~/.local` только для сборки; база — SQLite `poekhali-data/bureau.db` (или `DATABASE_URL` в `poekhali-data/env`); ошибки запуска — `poekhali-data/startup.log`.
+- Развёрнуто: http://kocker30.beget.tech (тариф Start, без SSL на техническом домене). Проверено на сервере: игра, Pyodide, вход преподавателя (токен), урок, вход ученика, `/api/state`, завершение урока.
