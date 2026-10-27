@@ -64,7 +64,7 @@ store = app.asgi.state.store
 if not store.has_password():
     pw = readable_password()
     store.set_password(pw)
-    print(f"\n  Пароль преподавателя: {pw}\n  (запишите; сменить: cd <сайт>/poekhali/server && PYTHONPATH=../.pydeps python3 -m bureau_server --db ../../poekhali-data/bureau.db --set-password)")
+    print(f"\n  Пароль преподавателя: {pw}\n  (запишите; сменить: строка BUREAU_TEACHER_PASSWORD=новый-пароль в poekhali-data/env, затем touch tmp/restart.txt в папке сайта)")
 EOF
 mkdir -p "$SITE/tmp" && touch "$SITE/tmp/restart.txt"
 echo

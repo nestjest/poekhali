@@ -9,6 +9,7 @@ export class ApiError extends Error {
 }
 
 const OFFLINE = 'Сервер урока недоступен. Проверьте адрес у преподавателя или играйте самостоятельно.';
+const API_TIMEOUT_MS = 20_000;
 
 export async function api<T>(path: string, opts: { method?: string; body?: unknown; token?: string | null } = {}): Promise<T> {
   let res: Response;
@@ -21,6 +22,8 @@ export async function api<T>(path: string, opts: { method?: string; body?: unkno
         ...(opts.token ? { Authorization: `Bearer ${opts.token}` } : {}),
       },
       body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
+      // A dropped connection (a VPN, a lost network) must end with a message, not an endless «Входим…».
+      signal: AbortSignal.timeout(API_TIMEOUT_MS),
     });
   } catch {
     throw new ApiError(OFFLINE, 0);
