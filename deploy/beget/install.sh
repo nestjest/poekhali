@@ -30,7 +30,7 @@ fi
 echo "== 3/4 Python packages"
 # No venv on the hosting (no ensurepip, no symlinks): packages go to .pydeps, passenger_wsgi.py adds it to sys.path.
 PY=/usr/bin/python3
-"$PY" -m pip install -q --upgrade --timeout 120 --retries 10 --target "$REPO/.pydeps" "fastapi>=0.115" "a2wsgi>=1.10" "psycopg[binary]>=3.2"
+"$PY" -m pip install -q --upgrade --timeout 120 --retries 10 --target "$REPO/.pydeps" "fastapi>=0.115" "uvicorn>=0.30" "a2wsgi>=1.10" "psycopg[binary]>=3.2"
 
 echo "== 4/4 site $SITE"
 mkdir -p "$DATA" && chmod 700 "$DATA"
