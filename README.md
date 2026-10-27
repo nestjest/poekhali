@@ -49,10 +49,10 @@ BUREAU_TEACHER_PASSWORD=придумайте-пароль docker compose up --bu
 Игра и сервер урока на обычном хостинге Beget с Passenger (`deploy/beget`). В терминале хостинга (панель → «Терминал»):
 
 ```bash
-git clone https://github.com/nestjest/poekhali ~/poekhali && bash ~/poekhali/deploy/beget/install.sh
+S=~/$(whoami).beget.tech; git clone https://github.com/nestjest/poekhali $S/poekhali && bash $S/poekhali/deploy/beget/install.sh
 ```
 
-Скрипт ставит Node.js в домашнюю папку и собирает игру, ставит пакеты Python в `~/poekhali/.pydeps`, кладёт игру в `public_html`, а `passenger_wsgi.py` — рядом с ней. При первом запуске он показывает пароль преподавателя. Настройки — `~/poekhali-data/env`: `DATABASE_URL` для PostgreSQL (без неё база SQLite в `~/poekhali-data/bureau.db`) и `BUREAU_PUBLIC_URL`. Обновление: `cd ~/poekhali && git pull && bash deploy/beget/install.sh`. Ограничения те же, что у Vercel: без WebSocket (опрос) и без `checker`.
+Репозиторий кладётся в папку сайта рядом с `public_html`: сайт работает от своего пользователя, и доступ у него есть только к папке сайта. Скрипт ставит Node.js в домашнюю папку и собирает игру, ставит пакеты Python в `poekhali/.pydeps`, копирует игру в `public_html`, а `passenger_wsgi.py` кладёт рядом с ней. При первом запуске он показывает пароль преподавателя. Настройки — `poekhali-data/env` в папке сайта: `DATABASE_URL` для PostgreSQL (без неё база SQLite `poekhali-data/bureau.db`) и `BUREAU_PUBLIC_URL`; ошибки запуска — `poekhali-data/startup.log`. Обновление: `cd ~/<сайт>/poekhali && git pull && bash deploy/beget/install.sh`. Ограничения те же, что у Vercel: без WebSocket (опрос) и без `checker`.
 
 ### Публикация на GitHub Pages
 
