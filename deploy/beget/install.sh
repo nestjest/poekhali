@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # «Поехали!» on Beget shared hosting (Passenger): install or update. In the hosting terminal:
 #   git clone https://github.com/nestjest/poekhali ~/poekhali && bash ~/poekhali/deploy/beget/install.sh
-#   update: cd ~/poekhali && git pull && bash deploy/beget/install.sh
+#   update: cd ~/poekhali && git pull && bash deploy/beget/install.sh   (SKIP_BUILD=1 — keep the built game)
 # Argument: the site folder (default ~/<login>.beget.tech). Data and settings: ~/poekhali-data (env, bureau.db).
 set -euo pipefail
 
@@ -20,13 +20,17 @@ export PATH="$NODE_DIR/bin:$PATH"
 
 echo "== 2/4 game build"
 cd "$REPO/frontend"
-npm ci --no-audit --no-fund
-npm run build
+if [ "${SKIP_BUILD:-}" = 1 ] && [ -f dist/index.html ]; then
+  echo "   skipped (SKIP_BUILD=1)"
+else
+  npm ci --no-audit --no-fund
+  npm run build
+fi
 
 echo "== 3/4 Python packages"
 # No venv on the hosting (no ensurepip, no symlinks): packages go to .pydeps, passenger_wsgi.py adds it to sys.path.
 PY=/usr/bin/python3
-"$PY" -m pip install -q --upgrade --target "$REPO/.pydeps" "fastapi>=0.115" "a2wsgi>=1.10" "psycopg[binary]>=3.2"
+"$PY" -m pip install -q --upgrade --timeout 120 --retries 10 --target "$REPO/.pydeps" "fastapi>=0.115" "a2wsgi>=1.10" "psycopg[binary]>=3.2"
 
 echo "== 4/4 site $SITE"
 mkdir -p "$DATA" && chmod 700 "$DATA"
