@@ -47,6 +47,9 @@ cp -a "$REPO/frontend/dist/." "$PUB/"
 cat > "$PUB/.htaccess" <<EOF
 PassengerEnabled On
 PassengerPython $PY
+# Pyodide: modules must be JavaScript, WebAssembly — application/wasm (the hosting has no types for them).
+AddType text/javascript .mjs
+AddType application/wasm .wasm
 EOF
 sed -e "s#@REPO@#$REPO#g" -e "s#@DATA@#$DATA#g" "$REPO/deploy/beget/passenger_wsgi.py" > "$SITE/passenger_wsgi.py"
 ln -sfn public_html "$SITE/public"          # Passenger's static folder
