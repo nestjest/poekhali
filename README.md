@@ -52,7 +52,7 @@ BUREAU_TEACHER_PASSWORD=придумайте-пароль docker compose up --bu
 git clone https://github.com/nestjest/poekhali ~/poekhali && bash ~/poekhali/deploy/beget/install.sh
 ```
 
-Скрипт ставит Node.js в домашнюю папку и собирает игру, создаёт `~/poekhali/.venv`, кладёт игру в `public_html`, а `passenger_wsgi.py` — рядом с ней. При первом запуске он показывает пароль преподавателя. Настройки — `~/poekhali-data/env`: `DATABASE_URL` для PostgreSQL (без неё база SQLite в `~/poekhali-data/bureau.db`) и `BUREAU_PUBLIC_URL`. Обновление: `cd ~/poekhali && git pull && bash deploy/beget/install.sh`. Ограничения те же, что у Vercel: без WebSocket (опрос) и без `checker`.
+Скрипт ставит Node.js в домашнюю папку и собирает игру, ставит пакеты Python в `~/poekhali/.pydeps`, кладёт игру в `public_html`, а `passenger_wsgi.py` — рядом с ней. При первом запуске он показывает пароль преподавателя. Настройки — `~/poekhali-data/env`: `DATABASE_URL` для PostgreSQL (без неё база SQLite в `~/poekhali-data/bureau.db`) и `BUREAU_PUBLIC_URL`. Обновление: `cd ~/poekhali && git pull && bash deploy/beget/install.sh`. Ограничения те же, что у Vercel: без WebSocket (опрос) и без `checker`.
 
 ### Публикация на GitHub Pages
 

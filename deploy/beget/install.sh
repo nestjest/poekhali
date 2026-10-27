@@ -24,9 +24,9 @@ npm ci --no-audit --no-fund
 npm run build
 
 echo "== 3/4 Python packages"
-[ -x "$REPO/.venv/bin/python" ] || python3 -m venv "$REPO/.venv"
-"$REPO/.venv/bin/pip" install -q --upgrade pip
-"$REPO/.venv/bin/pip" install -q "fastapi>=0.115" "a2wsgi>=1.10" "psycopg[binary]>=3.2"
+# No venv on the hosting (no ensurepip, no symlinks): packages go to .pydeps, passenger_wsgi.py adds it to sys.path.
+PY=/usr/bin/python3
+"$PY" -m pip install -q --upgrade --target "$REPO/.pydeps" "fastapi>=0.115" "a2wsgi>=1.10" "psycopg[binary]>=3.2"
 
 echo "== 4/4 site $SITE"
 mkdir -p "$DATA" && chmod 700 "$DATA"
@@ -40,14 +40,14 @@ find "$PUB" -mindepth 1 -maxdepth 1 ! -name cgi-bin ! -name .htaccess -exec rm -
 cp -a "$REPO/frontend/dist/." "$PUB/"
 cat > "$PUB/.htaccess" <<EOF
 PassengerEnabled On
-PassengerPython $REPO/.venv/bin/python
+PassengerPython $PY
 EOF
 sed -e "s#@REPO@#$REPO#g" -e "s#@DATA@#$DATA#g" "$REPO/deploy/beget/passenger_wsgi.py" > "$SITE/passenger_wsgi.py"
 mkdir -p "$SITE/tmp" && touch "$SITE/tmp/restart.txt"
 
 # The teacher password lives in the database; a new SQLite database gets a generated one (shown once).
 cd "$SITE"
-"$REPO/.venv/bin/python" - <<'EOF'
+PYTHONPATH="$REPO/.pydeps" "$PY" - <<'EOF'
 import passenger_wsgi as app
 from bureau_server.__main__ import readable_password
 
@@ -55,7 +55,7 @@ store = app.asgi.state.store
 if not store.has_password():
     pw = readable_password()
     store.set_password(pw)
-    print(f"\n  Пароль преподавателя: {pw}\n  (запишите; сменить: cd ~/poekhali/server && ../.venv/bin/python -m bureau_server --db ~/poekhali-data/bureau.db --set-password)")
+    print(f"\n  Пароль преподавателя: {pw}\n  (запишите; сменить: cd ~/poekhali/server && PYTHONPATH=../.pydeps python3 -m bureau_server --db ~/poekhali-data/bureau.db --set-password)")
 EOF
 echo
 echo "  Готово. Ученикам: https://$(basename "$SITE")/   Преподавателю: https://$(basename "$SITE")/#/teacher"

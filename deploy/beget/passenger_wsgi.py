@@ -13,6 +13,7 @@ from pathlib import Path
 
 REPO = Path("@REPO@")
 DATA = Path("@DATA@")
+sys.path.insert(0, str(REPO / ".pydeps"))       # packages: install.sh (pip --target, no venv on the hosting)
 sys.path.insert(0, str(REPO / "server"))
 sys.path.insert(0, str(REPO / "packages" / "judge"))
 

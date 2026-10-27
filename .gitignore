@@ -25,3 +25,5 @@ ui-audit/
 .agents/
 .claude/skills/neon*
 skills-lock.json
+# Beget deploy: Python packages (deploy/beget/install.sh)
+.pydeps/
