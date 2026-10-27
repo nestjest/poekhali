@@ -452,7 +452,7 @@ def create_app(db_path: Path | str = ":memory:", content: Path | None = None,
             raise HTTPException(429, "Слишком много попыток. Подождите 5 минут.")
         if not store.check_password(body.password):
             fails[ip].append(now)
-            raise HTTPException(401, "Пароль не подошёл. Он напечатан в окне запуска сервера.")
+            raise HTTPException(401, "Пароль не подошёл. Проверьте раскладку клавиатуры и Caps Lock.")
         fails.pop(ip, None)
         return {"token": store.new_teacher_token()}
 
