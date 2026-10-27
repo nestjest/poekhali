@@ -24,12 +24,20 @@ if env.exists():
         if sep and not line.lstrip().startswith("#"):
             os.environ.setdefault(key.strip(), value.strip().strip('"'))
 
-from a2wsgi import ASGIMiddleware  # noqa: E402
+try:
+    from a2wsgi import ASGIMiddleware
 
-from bureau_server.app import create_app  # noqa: E402
+    from bureau_server.app import create_app
 
-asgi = create_app(os.environ.get("DATABASE_URL") or str(DATA / "bureau.db"), content=REPO / "content")
-password = os.environ.get("BUREAU_TEACHER_PASSWORD")
-if password:
-    asgi.state.store.ensure_password(password)
-application = ASGIMiddleware(asgi)
+    asgi = create_app(os.environ.get("DATABASE_URL") or str(DATA / "bureau.db"), content=REPO / "content")
+    password = os.environ.get("BUREAU_TEACHER_PASSWORD")
+    if password:
+        asgi.state.store.ensure_password(password)
+    application = ASGIMiddleware(asgi)
+except BaseException:
+    # Passenger shows only «Web application could not be started»: the reason goes to @DATA@/startup.log.
+    import traceback
+
+    with open(DATA / "startup.log", "a", encoding="utf-8") as log:
+        log.write(f"--- {sys.executable} {sys.version}\n{traceback.format_exc()}\n")
+    raise
